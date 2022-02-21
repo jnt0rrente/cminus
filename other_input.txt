@@ -1,0 +1,11 @@
+
+/* Char
+   constants */
+
+	'a'	'b'	'.'	'-'	'~'
+	'\n'	'\t'
+	'\126'
+
+// Comment at the end of the file
+
+e
