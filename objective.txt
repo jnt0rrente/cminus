@@ -1,1 +1,1 @@
-Using ANTLR, create one lexer for the Cmm language described in description.txt.
+Implement a syntax recognizer using ANLTR. The language is described in description.txt, and an example program is provided in input.txt.

@@ -4,15 +4,23 @@ program: (CHAR_CONSTANT|WS|INT_CONSTANT|MULTI_LINE_COMMENT|REAL_CONSTANT|ID|SING
        ;
 
 expression:
-	expression ('*'|'/') expression
+	| '(' expression ')'
+	| expression '[' expression ']'
+	| expression '.' ID
+	| '(' 'type' ')' expression
+	| '-' expression
+	| '!' expression
+	| expression ('*'|'/'|'%') expression
 	| expression ('+'|'-') expression
+	| expression ('>'|'>='|'<'|'<='|'!='|'==') expression
+	| expression ('&&'|'||') expression
 	| INT_CONSTANT
 	;
 
 WS: [ \n\t\r]+ -> skip
 	;
 
-ID: ('_'?   ([a-z]|[A-Z])+  '_'?    INT_CONSTANT*   '_'?)+
+ID: [a-zA-Z_][a-zA-Z0-9_]*
     ;
 
 INT_CONSTANT: '0'
