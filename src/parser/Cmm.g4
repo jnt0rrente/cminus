@@ -3,6 +3,7 @@ grammar Cmm;
 program: (variable_definition|function_definition)*  'void' 'main' '('  ')' '{' function_body '}' EOF
        ;
 
+//Expression
 expression: '(' expression ')'
 	| expression '[' expression ']'
 	| expression '.' ID
@@ -20,23 +21,43 @@ expression: '(' expression ')'
 	| CHAR_CONSTANT
 	;
 
+function_invocation: ID '(' (expression (',' expression)*)? ')'
+	;
+
+
+
+//Statement
 statement: expression '=' expression ';'
 	| 'while' '(' expression ')' block
 	| 'if' '(' expression ')' block ('else' block)?
 	| 'return' expression ';'
 	| 'read' (expression (',' expression)*) ';'
 	| 'write' (expression (',' expression)*) ';' //write 't', 'r', 'u', 'e', '\n';
-	| function_invocation ';'
+	| procedure_invocation ';'
 	;
 
+procedure_invocation: ID '(' (expression (',' expression)*)? ')'
+	;
+
+
+
+
+//Type
 type: builtin_type
 	| 'struct' '{' record_field* '}'//structs can be empty
 	| type '[' INT_CONSTANT ']'
 	;
 
+builtin_type: 'int'
+	| 'double'
+	| 'char'
+	;
+
 record_field: type (ID (',' ID)*) ';' //refactored for clarity
 	;
 
+
+//Definition
 variable_definition: type (ID (',' ID)*) ';'
 	;
 
@@ -46,14 +67,8 @@ function_definition: (builtin_type|'void') ID      '(' (type ID(',' type ID)*)? 
 function_body: variable_definition* statement*
 	;
 
-function_invocation: ID '(' (expression (',' expression)*)? ')'
-	;
 
-builtin_type: 'int'
-	| 'double'
-	| 'char'
-	;
-
+//misc
 block: '{' statement* '}'
 	| statement
 	;
