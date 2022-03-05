@@ -56,9 +56,10 @@ statement returns [Statement ast]:
 		$e1.ast, $b1.ast, $b2.ast);}
 	| 'if' '(' e1=expression ')' b1=block{$ast = new IfElse($e1.ast.getLine(), $e1.ast.getColumn(),
 		$e1.ast, $b1.ast);}
-	| 'return' expression ';'
+	| 'return' e1=expression {$ast = new Return($e1.ast.getLine(), $e1.ast.getColumn(),
+		$e1.ast);} ';'
 	| s='read' r1=readWriteBlock {$ast = new Read($s.getLine(), $s.getCharPositionInLine()+1, $r1.ast);} ';'
-	| s='write' r1=readWriteBlock {$ast = new Read($s.getLine(), $s.getCharPositionInLine()+1, $r1.ast);} ';' //write 't', 'r', 'u', 'e', '\n';
+	| s='write' r1=readWriteBlock {$ast = new Write($s.getLine(), $s.getCharPositionInLine()+1, $r1.ast);} ';' //write 't', 'r', 'u', 'e', '\n';
 	| p1=procedure_invocation {$ast = $p1.ast;} ';'
 	;
 

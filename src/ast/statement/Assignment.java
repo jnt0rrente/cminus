@@ -13,4 +13,9 @@ public class Assignment extends AbstractASTNode implements Statement {
         this.exp1 = exp1;
         this.exp2 = exp2;
     }
+
+    @Override
+    public String toString() {
+        return exp1 + " = " + exp2;
+    }
 }

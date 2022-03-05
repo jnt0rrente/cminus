@@ -1,5 +1,6 @@
 import ast.Expression;
 import ast.Program;
+import ast.Statement;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
 import parser.*;
@@ -22,8 +23,8 @@ public class Main {
 		CommonTokenStream tokens = new CommonTokenStream(lexer); 
 		CmmParser parser = new CmmParser(tokens);
 
-		Expression ast = parser.expression().ast;
-		IntrospectorModel model=new IntrospectorModel("Program", ast);
+		Statement ast = parser.statement().ast;
+		IntrospectorModel model=new IntrospectorModel("Statement", ast);
 		new IntrospectorTree("Introspector", model);
 	}
 	

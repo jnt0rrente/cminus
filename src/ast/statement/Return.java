@@ -11,4 +11,9 @@ public class Return extends AbstractASTNode implements Statement {
         super(line, column);
         this.returnValue = returnValue;
     }
+
+    @Override
+    public String toString() {
+        return "return " + returnValue;
+    }
 }
