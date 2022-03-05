@@ -13,4 +13,9 @@ public class Write extends AbstractASTNode implements Statement {
         super(line, column);
         this.writeVal = writeVal;
     }
+
+    @Override
+    public String toString() {
+        return "write " + writeVal.size() + " values";
+    }
 }

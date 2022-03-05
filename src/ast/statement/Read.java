@@ -13,4 +13,9 @@ public class Read extends AbstractASTNode implements Statement {
         super(line, column);
         this.readVal = readVal;
     }
+
+    @Override
+    public String toString() {
+        return "read " + readVal.size() + " values";
+    }
 }

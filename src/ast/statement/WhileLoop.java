@@ -16,4 +16,9 @@ public class WhileLoop extends AbstractASTNode implements Statement {
         this.condition = condition;
         this.body = body;
     }
+
+    @Override
+    public String toString() {
+        return "while ("+ condition+") { body - size " + body.size() + "}";
+    }
 }
