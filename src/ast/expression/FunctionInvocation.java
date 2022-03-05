@@ -15,4 +15,9 @@ public class FunctionInvocation extends AbstractASTNode implements Expression, S
         this.name = name;
         this.parameters = parameters;
     }
+
+    @Override
+    public String toString() {
+        return name + "( parameters - size " + parameters.size() + " )";
+    }
 }

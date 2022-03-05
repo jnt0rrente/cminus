@@ -10,4 +10,9 @@ public class UnaryNot extends AbstractASTNode implements Expression {
         super(row,column);
         this.target = exp;
     }
+
+    @Override
+    public String toString() {
+        return ("-" + target);
+    }
 }

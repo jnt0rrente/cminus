@@ -14,4 +14,9 @@ public class Indexing extends AbstractASTNode implements Expression {
         this.array = array;
         this.index = index;
     }
+
+    @Override
+    public String toString() {
+        return array+"["+index+"]";
+    }
 }

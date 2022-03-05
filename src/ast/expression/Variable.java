@@ -11,4 +11,9 @@ public class Variable extends AbstractASTNode implements Expression {
         super(line, column);
         this.identifier = identifier;
     }
+
+    @Override
+    public String toString() {
+        return identifier;
+    }
 }

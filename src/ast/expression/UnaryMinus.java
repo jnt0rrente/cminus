@@ -12,4 +12,9 @@ public class UnaryMinus extends AbstractASTNode implements Expression {
 
         this.target = target;
     }
+
+    @Override
+    public String toString() {
+        return ("!" + target);
+    }
 }

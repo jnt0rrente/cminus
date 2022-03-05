@@ -16,4 +16,8 @@ public class Comparison extends AbstractASTNode implements Expression {
         this.operand2 = operand2;
     }
 
+    @Override
+    public String toString() {
+        return (operand1 + " " + operator + " " + operand2);
+    }
 }
