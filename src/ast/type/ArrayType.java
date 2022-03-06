@@ -12,4 +12,9 @@ public class ArrayType extends AbstractASTNode implements Type {
         this.size = size;
         this.elementType = elementType;
     }
+
+    @Override
+    public String toString() {
+        return "array: " + "type" + elementType + "size " + size;
+    }
 }

@@ -11,4 +11,9 @@ public class RecordField {
         this.name = name;
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "record field: " + type + " " + name;
+    }
 }
