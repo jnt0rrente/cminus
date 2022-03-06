@@ -68,8 +68,8 @@ readWriteBlock returns [List<Expression> ast = new ArrayList<Expression>()]:
 	;
 
 block returns [List<Statement> ast = new ArrayList<Statement>()]:
-    '{' (s1=statement {$ast.add($s1.ast);})* '}'
-	| s1=statement {$ast.add($s1.ast);}
+    s1=statement {$ast.add($s1.ast);}
+	| '{' (s1=statement {$ast.add($s1.ast);})* '}'
 	;
 
 procedure_invocation returns [FunctionInvocation ast]:

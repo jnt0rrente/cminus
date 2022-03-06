@@ -796,30 +796,6 @@ public class CmmParser extends Parser {
 			setState(192);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__4:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(179);
-				match(T__4);
-				setState(185);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__9) | (1L << T__10) | (1L << T__25) | (1L << T__26) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << ID) | (1L << INT_CONSTANT) | (1L << CHAR_CONSTANT) | (1L << REAL_CONSTANT))) != 0)) {
-					{
-					{
-					setState(180);
-					((BlockContext)_localctx).s1 = statement();
-					_localctx.ast.add(((BlockContext)_localctx).s1.ast);
-					}
-					}
-					setState(187);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(188);
-				match(T__5);
-				}
-				break;
 			case T__2:
 			case T__9:
 			case T__10:
@@ -832,11 +808,35 @@ public class CmmParser extends Parser {
 			case INT_CONSTANT:
 			case CHAR_CONSTANT:
 			case REAL_CONSTANT:
-				enterOuterAlt(_localctx, 2);
+				enterOuterAlt(_localctx, 1);
 				{
-				setState(189);
+				setState(179);
 				((BlockContext)_localctx).s1 = statement();
 				_localctx.ast.add(((BlockContext)_localctx).s1.ast);
+				}
+				break;
+			case T__4:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(182);
+				match(T__4);
+				setState(188);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__9) | (1L << T__10) | (1L << T__25) | (1L << T__26) | (1L << T__28) | (1L << T__29) | (1L << T__30) | (1L << ID) | (1L << INT_CONSTANT) | (1L << CHAR_CONSTANT) | (1L << REAL_CONSTANT))) != 0)) {
+					{
+					{
+					setState(183);
+					((BlockContext)_localctx).s1 = statement();
+					_localctx.ast.add(((BlockContext)_localctx).s1.ast);
+					}
+					}
+					setState(190);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(191);
+				match(T__5);
 				}
 				break;
 			default:
@@ -1459,8 +1459,8 @@ public class CmmParser extends Parser {
 		"\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5"+
 		"\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3"+
 		"\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\5\5\u00a9\n\5\3\6\3\6\3\6\3"+
-		"\6\3\6\3\6\7\6\u00b1\n\6\f\6\16\6\u00b4\13\6\3\7\3\7\3\7\3\7\7\7\u00ba"+
-		"\n\7\f\7\16\7\u00bd\13\7\3\7\3\7\3\7\3\7\5\7\u00c3\n\7\3\b\3\b\3\b\3\b"+
+		"\6\3\6\3\6\7\6\u00b1\n\6\f\6\16\6\u00b4\13\6\3\7\3\7\3\7\3\7\3\7\3\7\3"+
+		"\7\7\7\u00bd\n\7\f\7\16\7\u00c0\13\7\3\7\5\7\u00c3\n\7\3\b\3\b\3\b\3\b"+
 		"\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t\7\t\u00d1\n\t\f\t\16\t\u00d4\13\t\3\t"+
 		"\5\t\u00d7\n\t\3\n\3\n\3\n\3\n\3\n\7\n\u00de\n\n\f\n\16\n\u00e1\13\n\3"+
 		"\n\5\n\u00e4\n\n\3\n\3\n\3\n\3\n\7\n\u00ea\n\n\f\n\16\n\u00ed\13\n\3\13"+
@@ -1508,11 +1508,11 @@ public class CmmParser extends Parser {
 		"\u00aa\u00ab\5\4\3\2\u00ab\u00b2\b\6\1\2\u00ac\u00ad\7\"\2\2\u00ad\u00ae"+
 		"\5\4\3\2\u00ae\u00af\b\6\1\2\u00af\u00b1\3\2\2\2\u00b0\u00ac\3\2\2\2\u00b1"+
 		"\u00b4\3\2\2\2\u00b2\u00b0\3\2\2\2\u00b2\u00b3\3\2\2\2\u00b3\13\3\2\2"+
-		"\2\u00b4\u00b2\3\2\2\2\u00b5\u00bb\7\7\2\2\u00b6\u00b7\5\b\5\2\u00b7\u00b8"+
-		"\b\7\1\2\u00b8\u00ba\3\2\2\2\u00b9\u00b6\3\2\2\2\u00ba\u00bd\3\2\2\2\u00bb"+
-		"\u00b9\3\2\2\2\u00bb\u00bc\3\2\2\2\u00bc\u00be\3\2\2\2\u00bd\u00bb\3\2"+
-		"\2\2\u00be\u00c3\7\b\2\2\u00bf\u00c0\5\b\5\2\u00c0\u00c1\b\7\1\2\u00c1"+
-		"\u00c3\3\2\2\2\u00c2\u00b5\3\2\2\2\u00c2\u00bf\3\2\2\2\u00c3\r\3\2\2\2"+
+		"\2\u00b4\u00b2\3\2\2\2\u00b5\u00b6\5\b\5\2\u00b6\u00b7\b\7\1\2\u00b7\u00c3"+
+		"\3\2\2\2\u00b8\u00be\7\7\2\2\u00b9\u00ba\5\b\5\2\u00ba\u00bb\b\7\1\2\u00bb"+
+		"\u00bd\3\2\2\2\u00bc\u00b9\3\2\2\2\u00bd\u00c0\3\2\2\2\u00be\u00bc\3\2"+
+		"\2\2\u00be\u00bf\3\2\2\2\u00bf\u00c1\3\2\2\2\u00c0\u00be\3\2\2\2\u00c1"+
+		"\u00c3\7\b\2\2\u00c2\u00b5\3\2\2\2\u00c2\u00b8\3\2\2\2\u00c3\r\3\2\2\2"+
 		"\u00c4\u00c5\7(\2\2\u00c5\u00c6\7\5\2\2\u00c6\u00c7\5\20\t\2\u00c7\u00c8"+
 		"\b\b\1\2\u00c8\u00c9\7\6\2\2\u00c9\17\3\2\2\2\u00ca\u00cb\5\4\3\2\u00cb"+
 		"\u00d2\b\t\1\2\u00cc\u00cd\7\"\2\2\u00cd\u00ce\5\4\3\2\u00ce\u00cf\b\t"+
@@ -1545,7 +1545,7 @@ public class CmmParser extends Parser {
 		"\2\u0121\u011f\3\2\2\2\u0121\u0122\3\2\2\2\u0122\u0127\3\2\2\2\u0123\u0121"+
 		"\3\2\2\2\u0124\u0126\5\b\5\2\u0125\u0124\3\2\2\2\u0126\u0129\3\2\2\2\u0127"+
 		"\u0125\3\2\2\2\u0127\u0128\3\2\2\2\u0128\35\3\2\2\2\u0129\u0127\3\2\2"+
-		"\2\27 \"Mmo\u00a8\u00b2\u00bb\u00c2\u00d2\u00d6\u00df\u00e3\u00eb\u00f6"+
+		"\2\27 \"Mmo\u00a8\u00b2\u00be\u00c2\u00d2\u00d6\u00df\u00e3\u00eb\u00f6"+
 		"\u0101\u0108\u0114\u0117\u0121\u0127";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
