@@ -84,18 +84,25 @@ arguments returns [List<Expression> ast = new ArrayList<Expression>()]:
 
 
 //Type
-type returns [Type ast]: builtin_type
-	| 'struct' '{' record_field* '}'//structs can be empty
-	| type '[' INT_CONSTANT ']'
+type returns [Type ast]:
+	b1=builtin_type {$ast = $b1.ast;}
+	| s1='struct' '{' b2=struct_body '}' {$ast = new StructType($s1.getLine(), $s1.getCharPositionInLine()+1, $b2.ast);}//structs can be empty
+	| t1=type '[' i1=INT_CONSTANT ']' {$ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), LexerHelper.lexemeToInt($i1.text), $t1.ast);}
 	;
 
-builtin_type returns [Type ast]: 'int'
-	| 'double'
-	| 'char'
+builtin_type returns [Type ast]: s='int' {$ast = new IntType($s.getLine(), $s.getCharPositionInLine()+1);}
+	| s='double'{$ast = new DoubleType($s.getLine(), $s.getCharPositionInLine()+1);}
+	| s='char'{$ast = new CharType($s.getLine(), $s.getCharPositionInLine()+1);}
 	;
 
-record_field: type (ID (',' ID)*) ';' //refactored for clarity
-	;
+struct_body returns [List<RecordField> ast = new ArrayList<RecordField>()]:
+	(r1=record_field_line{for (RecordField r : $r1.ast) $ast.add(r);})*
+;
+
+record_field_line returns [List<RecordField> ast = new ArrayList<RecordField>()]: //for the "int a, b, c" case
+	t1=type (i1=ID {$ast.add(new RecordField($i1.text, $t1.ast));}
+     (',' i2=ID {$ast.add(new RecordField($i2.text, $t1.ast));})*) ';' //refactored for clarity
+;
 
 
 //Definition

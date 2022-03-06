@@ -3,22 +3,14 @@ package ast.type;
 import ast.AbstractASTNode;
 import ast.Type;
 
-public class StructType extends AbstractASTNode implements Type {
-    RecordField[] records;
+import java.util.List;
 
-    public StructType(int line, int column, RecordField...records) {
+public class StructType extends AbstractASTNode implements Type {
+    List<RecordField> records;
+
+    public StructType(int line, int column, List<RecordField> records) {
         super(line, column);
         this.records = records;
-    }
-
-    public class RecordField {
-        private String name;
-        private Type type;
-
-        public RecordField(String name, Type type) {
-            this.name = name;
-            this.type = type;
-        }
     }
 
 }
