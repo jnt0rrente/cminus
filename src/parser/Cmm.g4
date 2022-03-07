@@ -8,9 +8,20 @@ grammar Cmm;
 	import ast.type.*;
 }
 
-program:
-		(variable_definition|function_definition)* main_function_definition EOF
+program returns [Program ast]:
+		d1=programDefinitions
+		m1=main_function_definition
+		{$ast = new Program(0,0, $d1.ast, $m1.ast);}
+		EOF
        ;
+
+programDefinitions returns [List<Definition> ast = new ArrayList<Definition>()]:
+	((v1=variable_definition {
+		for (Definition d : $v1.ast) $ast.add(d);
+	})|(f1=function_definition{
+		$ast.add($f1.ast);
+	}))*
+	;
 
 // {$ast = new Expression($e1.ast.getLine(), $e1.start.getCharPositionInLine()+1, );}
 //Expression

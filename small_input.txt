@@ -1,9 +1,15 @@
-char charAt(int i) {
-	char[8] string;
-	char ret;
+int a;
+char b,c;
 
-	string = readString();
+struct {
+double c;
+int[45] numbers;
+} potencial;
 
-	ret = string % 5;
-	return ret;
+int ayuda(int oa) {
+	return oa;
+	}
+
+void main() {
+	ayuda(oa);
 }

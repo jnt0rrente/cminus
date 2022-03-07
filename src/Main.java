@@ -21,8 +21,8 @@ public class Main {
 		CommonTokenStream tokens = new CommonTokenStream(lexer); 
 		CmmParser parser = new CmmParser(tokens);
 
-		Definition ast = parser.definition().ast.get(0);
-		IntrospectorModel model=new IntrospectorModel("Definition", ast);
+		Program ast = parser.program().ast;
+		IntrospectorModel model=new IntrospectorModel("Program", ast);
 		new IntrospectorTree("Introspector", model);
 	}
 	
