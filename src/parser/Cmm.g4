@@ -86,8 +86,17 @@ arguments returns [List<Expression> ast = new ArrayList<Expression>()]:
 //Type
 type returns [Type ast]:
 	b1=builtin_type {$ast = $b1.ast;}
-	| s1='struct' '{' b2=struct_body '}' {$ast = new StructType($s1.getLine(), $s1.getCharPositionInLine()+1, $b2.ast);}//structs can be empty
+	| s1=struct_type {$ast = $s1.ast;}
 	| t1=type '[' i1=INT_CONSTANT ']' {$ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), LexerHelper.lexemeToInt($i1.text), $t1.ast);}
+	;
+
+returnable_type returns [Type ast]:
+	b1=builtin_type {$ast = $b1.ast;}
+	| s='void' {$ast = new VoidType($s.getLine(), $s.getCharPositionInLine()+1);}
+	;
+
+struct_type returns [StructType ast]:
+	s1='struct' '{' b2=struct_body '}' {$ast = new StructType($s1.getLine(), $s1.getCharPositionInLine()+1, $b2.ast);}
 	;
 
 builtin_type returns [Type ast]: s='int' {$ast = new IntType($s.getLine(), $s.getCharPositionInLine()+1);}
@@ -104,6 +113,10 @@ record_field_line returns [List<RecordField> ast = new ArrayList<RecordField>()]
      (',' i2=ID {$ast.add(new RecordField($i2.text, $t1.ast));})*) ';' //refactored for clarity
 ;
 
+
+definition returns [Definition ast]:
+	'a'
+	;
 
 //Definition
 variable_definition: type (ID (',' ID)*) ';'
