@@ -11,6 +11,6 @@ public class IntType extends AbstractASTNode implements Type {
 
     @Override
     public String toString() {
-        return "int type";
+        return "Int builtin";
     }
 }

@@ -10,6 +10,6 @@ public class VoidType extends AbstractASTNode implements Type {
 
     @Override
     public String toString() {
-        return "void type";
+        return "Void builtin";
     }
 }

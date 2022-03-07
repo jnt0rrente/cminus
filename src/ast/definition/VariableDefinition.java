@@ -9,4 +9,10 @@ public class VariableDefinition extends AbstractDefinition implements Expression
         super(line, column, name);
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "Variable definition: [" + type.toString() + ", name: " + getName() + "]";
+    }
+
 }

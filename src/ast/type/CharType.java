@@ -11,6 +11,6 @@ public class CharType extends AbstractASTNode implements Type {
 
     @Override
     public String toString() {
-        return "char type";
+        return "Char builtin";
     }
 }

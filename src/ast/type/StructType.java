@@ -16,7 +16,7 @@ public class StructType extends AbstractASTNode implements Type {
 
     @Override
     public String toString() {
-        return "struct: " + records.size() + " records";
+        return "Struct: " + records.size() + " records";
     }
 }
 

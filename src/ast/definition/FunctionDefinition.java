@@ -19,4 +19,9 @@ public class FunctionDefinition extends AbstractDefinition {
         this.bodyVariables = bodyVariables;
         this.bodyStatements = bodyStatements;
     }
+
+    @Override
+    public String toString() {
+        return "Function definition: [\n\tname: "+ getName()+",\n\t" +bodyVariables.size()+" variables,\n\t"+bodyStatements.size()+" statements,\n\ttype: " + functionType.toString() + "\n\t]";
+    }
 }

@@ -14,6 +14,6 @@ public class RecordField {
 
     @Override
     public String toString() {
-        return "record field: " + type + " " + name;
+        return "Record field: " + type + " " + name;
     }
 }
