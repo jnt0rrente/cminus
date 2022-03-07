@@ -1,8 +1,9 @@
-struct {
-	int c, d, e;
-	char a;
+char charAt(int i) {
+	char[8] string;
+	char ret;
 
-	struct {
-		char b;
-	} b;
+	string = readString();
+
+	ret = string % 5;
+	return ret;
 }

@@ -3,14 +3,20 @@ package ast.definition;
 import ast.Statement;
 import ast.Type;
 
+import java.util.List;
+
 public class FunctionDefinition extends AbstractDefinition {
 
-    private Statement[] body;
+    private List<VariableDefinition> bodyVariables;
+    private List<Statement> bodyStatements;
+
     private Type functionType;
 
-    public FunctionDefinition(int line, int column, String name, Type functionType, Statement...body) {
+    public FunctionDefinition(int line, int column, String name, Type functionType,
+                              List<VariableDefinition> bodyVariables, List<Statement> bodyStatements) {
         super(line, column, name);
-        this.body = body;
         this.functionType = functionType;
+        this.bodyVariables = bodyVariables;
+        this.bodyStatements = bodyStatements;
     }
 }

@@ -9,7 +9,7 @@ grammar Cmm;
 }
 
 program:
-		(variable_definition|function_definition)*  'void' 'main' '('  ')' '{' function_body '}' EOF
+		(variable_definition|function_definition)* main_function_definition EOF
        ;
 
 // {$ast = new Expression($e1.ast.getLine(), $e1.start.getCharPositionInLine()+1, );}
@@ -82,7 +82,6 @@ arguments returns [List<Expression> ast = new ArrayList<Expression>()]:
 	|
 	;
 
-
 //Type
 type returns [Type ast]:
 	b1=builtin_type {$ast = $b1.ast;}
@@ -106,28 +105,77 @@ builtin_type returns [Type ast]: s='int' {$ast = new IntType($s.getLine(), $s.ge
 
 struct_body returns [List<RecordField> ast = new ArrayList<RecordField>()]:
 	(r1=record_field_line{for (RecordField r : $r1.ast) $ast.add(r);})*
-;
+	;
 
 record_field_line returns [List<RecordField> ast = new ArrayList<RecordField>()]: //for the "int a, b, c" case
 	t1=type (i1=ID {$ast.add(new RecordField($i1.text, $t1.ast));}
-     (',' i2=ID {$ast.add(new RecordField($i2.text, $t1.ast));})*) ';' //refactored for clarity
-;
-
-
-definition returns [Definition ast]:
-	'a'
+     (',' i2=ID {$ast.add(new RecordField($i2.text, $t1.ast));})*) ';'
 	;
 
-//Definition
-variable_definition: type (ID (',' ID)*) ';'
+//definition
+definition returns [List<Definition> ast = new ArrayList<Definition>()]:
+	v1=variable_definition {for (Definition d : $v1.ast) $ast.add(d);}
+	| f1=function_definition {$ast.add($f1.ast);}
 	;
 
-function_definition: (builtin_type|'void') ID      '(' (type ID(',' type ID)*)? ')'        '{' function_body '}'
+variable_definition returns [List<VariableDefinition> ast = new ArrayList<VariableDefinition>()]:
+	t1=type (i1=ID {$ast.add(new VariableDefinition($t1.ast.getLine(), $t1.ast.getColumn(), $i1.text, $t1.ast));}
+         (',' i2=ID {$ast.add(new VariableDefinition($t1.ast.getLine(), $t1.ast.getColumn(), $i2.text, $t1.ast));})*) ';'
+    ;
+
+function_definition returns [FunctionDefinition ast]:
+	(r1=returnable_type) i1=ID
+	'(' f1=function_definition_parameter_declaration ')'
+	'{'
+		b1=function_definition_body_variables
+		b2=function_definition_body_statements
+	'}'
+	{$ast = new FunctionDefinition(
+		$r1.ast.getLine(),
+		$r1.ast.getColumn(),
+		$i1.text,
+		new FunctionType(
+			$r1.ast.getLine(),
+			$r1.ast.getColumn(),
+			$r1.ast,
+			$f1.ast),
+		$b1.ast,
+		$b2.ast);}
 	;
 
-function_body: variable_definition* statement*
+function_definition_parameter_declaration returns [List<VariableDefinition> ast = new ArrayList<VariableDefinition>()]:
+	(t1=type i1=ID {$ast.add(new VariableDefinition($t1.ast.getLine(), $t1.ast.getColumn(), $i1.text, $t1.ast));}
+	(',' t2=type i2=ID {$ast.add(new VariableDefinition($t2.ast.getLine(), $t2.ast.getColumn(), $i2.text, $t2.ast));})*)
+	|
 	;
 
+function_definition_body_variables returns [List<VariableDefinition> ast = new ArrayList<VariableDefinition>()] :
+		(v1=variable_definition {for (VariableDefinition d : $v1.ast) $ast.add(d);})* //Interface or concrete type?
+	;
+
+function_definition_body_statements returns [List<Statement> ast = new ArrayList<Statement>()]:
+		(s1=statement{$ast.add($s1.ast);})*
+	;
+
+main_function_definition returns [FunctionDefinition ast]:
+	v1='void' m1='main' '('  ')' '{'
+	    b1=function_definition_body_variables
+    	b2=function_definition_body_statements
+	'}'
+
+	{$ast = new FunctionDefinition(
+		$v1.getLine(),
+		$v1.getCharPositionInLine()+1,
+		$m1.text,
+		new FunctionType( //tried to refactor this, did not work
+        		$v1.getLine(),
+        		$v1.getCharPositionInLine()+1,
+        	    new VoidType($v1.getLine(), $v1.getCharPositionInLine()+1),
+        	    new ArrayList<VariableDefinition>()
+        	    ),
+		$b1.ast,
+		$b2.ast);}
+	;
 
 WS: [ \n\t\r]+ -> skip
 	;
