@@ -16,4 +16,8 @@ public class RecordField {
     public String toString() {
         return "Record field: " + type + " " + name;
     }
+
+    public String getName() {
+        return name;
+    }
 }
