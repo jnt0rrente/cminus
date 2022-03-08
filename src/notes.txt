@@ -1,0 +1,6 @@
+main inside definitions en program
+cast type renamed to cast type
+function invocation name variable
+arrays take inttype, not intliteral
+write 'a','b'; == write a write b
+la movida del ambiguous array
