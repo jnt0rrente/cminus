@@ -14,6 +14,6 @@ public class Program extends AbstractASTNode {
 
     @Override
     public String toString() {
-        return "Program: " + definitions.size() + " definitions.";
+        return "Program: " + definitions.size() + " definitions (plus main).";
     }
 }

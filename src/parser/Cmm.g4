@@ -95,9 +95,10 @@ arguments returns [List<Expression> ast = new ArrayList<Expression>()]:
 
 //Type
 type returns [Type ast]:
-	b1=builtin_type {$ast = $b1.ast;}
+	t1=type '[' e1=expression ']' {$ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), $e1.ast, $t1.ast);}
+		('[' e2=expression ']'{((ArrayType)$ast).setType(new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), $e2.ast, $t1.ast));})*
+	| b1=builtin_type {$ast = $b1.ast;}
 	| s1=struct_type {$ast = $s1.ast;}
-	| t1=type '[' i1=INT_CONSTANT ']' {$ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), LexerHelper.lexemeToInt($i1.text), $t1.ast);}
 	;
 
 returnable_type returns [Type ast]:
