@@ -22,6 +22,6 @@ public class FunctionDefinition extends AbstractDefinition {
 
     @Override
     public String toString() {
-        return "Function definition: [\n\tname: "+ getName()+",\n\t" +bodyVariables.size()+" variables,\n\t"+bodyStatements.size()+" statements,\n\ttype: " + functionType.toString() + "\n\t]";
+        return "Function definition: [name: "+ getName()+", " +bodyVariables.size()+" variables, "+bodyStatements.size()+" statements, type: " + functionType.toString() + "]";
     }
 }

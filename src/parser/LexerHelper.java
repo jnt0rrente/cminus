@@ -14,7 +14,11 @@ public class LexerHelper {
 
 	public static char lexemeToChar(String str) {
 		try {
-			if (str.equals("'\\n'")) {
+			if (str.length() == 1) {
+				return str.charAt(0);
+			}
+
+			else if (str.equals("'\\n'")) {
 				return '\n';
 			} else if (str.equals("'\\t'")) {
 				return '\t';

@@ -1,11 +1,3 @@
-
-/* Char
-   constants */
-
-	'a'	'b'	'.'	'-'	'~'
-	'\n'	'\t'
-	'\126'
-
-// Comment at the end of the file
-
-e
+void main() {
+	int[20][10];
+}
