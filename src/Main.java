@@ -1,4 +1,5 @@
 import ast.*;
+import errorhandler.ErrorHandler;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
 import parser.*;
@@ -22,8 +23,14 @@ public class Main {
 		CmmParser parser = new CmmParser(tokens);
 
 		Program ast = parser.program().ast;
-		IntrospectorModel model=new IntrospectorModel("Program", ast);
-		new IntrospectorTree("Introspector", model);
+
+		if (ErrorHandler.getInstance().anyErrors())
+			ErrorHandler.getInstance().showErrors(System.err);
+		else {
+
+			IntrospectorModel model=new IntrospectorModel("Program", ast);
+			new IntrospectorTree("Introspector", model);
+		}
 	}
 	
 
