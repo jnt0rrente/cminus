@@ -46,15 +46,18 @@ expression returns [Expression ast]:
 	| e1=expression op=('&&'|'||') e2=expression {$ast = new Logical($e1.ast.getLine(), $e1.ast.getColumn(),
 			$op.text, $e1.ast, $e2.ast);}
 	| f1=function_invocation {$ast = $f1.ast;}
-	| id=ID {$ast = new Variable($id.getLine(), $id.getCharPositionInLine()+1, $id.text); }
+	| id=variable {$ast = $id.ast;}
 	| i1=INT_CONSTANT  {$ast = new IntLiteral($i1.getLine(), $i1.getCharPositionInLine()+1, LexerHelper.lexemeToInt($i1.text)); }
 	| r1=REAL_CONSTANT {$ast = new RealLiteral($r1.getLine(), $r1.getCharPositionInLine()+1, LexerHelper.lexemeToReal($r1.text)); }
 	| c1=CHAR_CONSTANT {$ast = new CharLiteral($c1.getLine(), $c1.getCharPositionInLine()+1, LexerHelper.lexemeToChar($c1.text)); }
 	;
 
+variable returns [Variable ast]:
+	id=ID {$ast = new Variable($id.getLine(), $id.getCharPositionInLine()+1, $id.text); }
+	;
+
 function_invocation returns [Expression ast]:
-	ID '(' a1=arguments {$ast = new FunctionInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text,
-			$a1.ast);} ')'
+	e1=variable '(' a1=arguments {$ast = new FunctionInvocation($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $a1.ast);} ')'
 	;
 
 //Statement
@@ -84,7 +87,7 @@ block returns [List<Statement> ast = new ArrayList<Statement>()]:
 	;
 
 procedure_invocation returns [FunctionInvocation ast]:
-	ID '(' a1=arguments {$ast = new FunctionInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text,
+	v1=variable '(' a1=arguments {$ast = new FunctionInvocation($v1.ast.getLine(), $v1.ast.getColumn(), $v1.ast,
     			$a1.ast);} ')'
     ;
 
