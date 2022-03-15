@@ -4,7 +4,7 @@ import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Type;
 
-public class Cast extends AbstractASTNode implements Expression {
+public class Cast extends AbstractExpression {
     private Type castType;
     private Expression exp;
 

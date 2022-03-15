@@ -3,7 +3,7 @@ package ast.expression;
 import ast.AbstractASTNode;
 import ast.Expression;
 
-public class UnaryMinus extends AbstractASTNode implements Expression {
+public class UnaryMinus extends AbstractExpression {
 
     private Expression target;
 

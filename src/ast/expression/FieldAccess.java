@@ -3,7 +3,7 @@ package ast.expression;
 import ast.AbstractASTNode;
 import ast.Expression;
 
-public class FieldAccess extends AbstractASTNode implements Expression {
+public class FieldAccess extends AbstractExpression {
     private String name;
     private Expression exp;
 

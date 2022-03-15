@@ -3,7 +3,7 @@ package ast.expression;
 import ast.AbstractASTNode;
 import ast.Expression;
 
-public class IntLiteral extends AbstractASTNode implements Expression {
+public class IntLiteral extends AbstractExpression {
 
     private int value;
 

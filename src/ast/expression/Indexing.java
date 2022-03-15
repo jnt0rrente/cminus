@@ -3,7 +3,7 @@ package ast.expression;
 import ast.AbstractASTNode;
 import ast.Expression;
 
-public class Indexing extends AbstractASTNode implements Expression {
+public class Indexing extends AbstractExpression {
 
     private Expression index;
     private Expression array;

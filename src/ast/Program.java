@@ -1,5 +1,7 @@
 package ast;
 
+import semantic.Visitor;
+
 import java.util.List;
 
 public class Program extends AbstractASTNode {
@@ -14,5 +16,14 @@ public class Program extends AbstractASTNode {
     @Override
     public String toString() {
         return "Program: " + definitions.size() + " definitions (plus main).";
+    }
+
+    public List<Definition> getDefinitions() {
+        return definitions;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
+        return null;
     }
 }

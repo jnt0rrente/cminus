@@ -6,7 +6,7 @@ import ast.Statement;
 
 import java.util.List;
 
-public class FunctionInvocation extends AbstractASTNode implements Expression, Statement {
+public class FunctionInvocation extends AbstractExpression implements Statement {
     private Variable name;
     private List<Expression> parameters;
 

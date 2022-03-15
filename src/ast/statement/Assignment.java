@@ -5,17 +5,25 @@ import ast.Expression;
 import ast.Statement;
 
 public class Assignment extends AbstractASTNode implements Statement {
-    private Expression exp1;
-    private Expression exp2;
+    private Expression lhs;
+    private Expression rhs;
 
-    public Assignment(int line, int column, Expression exp1, Expression exp2) {
+    public Assignment(int line, int column, Expression lhs, Expression rhs) {
         super(line, column);
-        this.exp1 = exp1;
-        this.exp2 = exp2;
+        this.lhs = lhs;
+        this.rhs = rhs;
     }
 
     @Override
     public String toString() {
-        return exp1.toString() + " = " + exp2.toString();
+        return lhs.toString() + " = " + rhs.toString();
+    }
+
+    public Expression getLHS() {
+        return lhs;
+    }
+
+    public Expression getRHS() {
+        return rhs;
     }
 }

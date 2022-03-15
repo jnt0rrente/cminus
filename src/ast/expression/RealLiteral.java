@@ -3,7 +3,7 @@ package ast.expression;
 import ast.AbstractASTNode;
 import ast.Expression;
 
-public class RealLiteral extends AbstractASTNode implements Expression {
+public class RealLiteral extends AbstractExpression {
 
     private double value;
 
