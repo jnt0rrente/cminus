@@ -13,6 +13,30 @@ public class IfElse extends AbstractASTNode implements Statement {
     private List<Statement> body;
     private List<Statement> bodyElse;
 
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public void setCondition(Expression condition) {
+        this.condition = condition;
+    }
+
+    public List<Statement> getBody() {
+        return body;
+    }
+
+    public void setBody(List<Statement> body) {
+        this.body = body;
+    }
+
+    public List<Statement> getBodyElse() {
+        return bodyElse;
+    }
+
+    public void setBodyElse(List<Statement> bodyElse) {
+        this.bodyElse = bodyElse;
+    }
+
     public IfElse(int line, int row, Expression condition, List<Statement> body, List<Statement> bodyElse) {
         super(line, row);
 
@@ -40,6 +64,6 @@ public class IfElse extends AbstractASTNode implements Statement {
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
-        return null;
+        return v.visit(this,param);
     }
 }

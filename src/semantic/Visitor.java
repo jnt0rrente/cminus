@@ -4,7 +4,8 @@ import ast.Program;
 import ast.definition.FunctionDefinition;
 import ast.definition.VariableDefinition;
 import ast.expression.*;
-import ast.statement.Assignment;
+import ast.statement.*;
+import ast.type.*;
 
 public interface Visitor<TP, TR> {
     TR visit(Program program, TP param);
@@ -40,5 +41,33 @@ public interface Visitor<TP, TR> {
     TR visit(FunctionDefinition functionDefinition, TP param);
 
     TR visit(VariableDefinition variableDefinition, TP param);
+
+    TR visit(IfElse ifElse, TP param);
+
+    TR visit(Read read, TP param);
+
+    TR visit(Return ret, TP param);
+
+    TR visit(WhileLoop whileLoop, TP param);
+
+    TR visit(Write write, TP param);
+
+    TR visit(CharType charType, TP param);
+
+    TR visit(DoubleType doubleType, TP param);
+
+    TR visit(ErrorType errorType, TP param);
+
+    TR visit(FunctionType functionType, TP param);
+
+    TR visit(IntType intType, TP param);
+
+    TR visit(RecordField recordField, TP param);
+
+    TR visit(StructType structType, TP param);
+
+    TR visit(VoidType voidType, TP param);
+
+    TR visit(ArrayType arrayType, TP param);
 }
 

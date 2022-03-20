@@ -25,6 +25,14 @@ public class WhileLoop extends AbstractASTNode implements Statement {
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
-        return null;
+        return v.visit(this,param);
+    }
+
+    public Expression getCondition() {
+        return condition;
+    }
+
+    public List<Statement> getBody() {
+        return body;
     }
 }

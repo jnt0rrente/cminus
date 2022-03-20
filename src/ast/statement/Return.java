@@ -8,6 +8,10 @@ import semantic.Visitor;
 public class Return extends AbstractASTNode implements Statement {
     private Expression returnValue;
 
+    public Expression getReturnValue() {
+        return returnValue;
+    }
+
     public Return(int line, int column, Expression returnValue) {
         super(line, column);
         this.returnValue = returnValue;
@@ -20,6 +24,6 @@ public class Return extends AbstractASTNode implements Statement {
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
-        return null;
+        return v.visit(this,param);
     }
 }

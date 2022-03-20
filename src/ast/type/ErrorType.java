@@ -22,6 +22,6 @@ public class ErrorType extends AbstractASTNode implements Type {
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
-        return null;
+        return v.visit(this,param);
     }
 }
