@@ -10,6 +10,10 @@ import java.util.List;
 public class Read extends AbstractASTNode implements Statement {
     private Expression readVal;
 
+    public Expression getReadVal() {
+        return readVal;
+    }
+
     public Read(int line, int column, Expression readVal) {
         super(line, column);
         this.readVal = readVal;
@@ -22,6 +26,6 @@ public class Read extends AbstractASTNode implements Statement {
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
-        return v.visit(this,param);
+        return v.visit(this, param);
     }
 }

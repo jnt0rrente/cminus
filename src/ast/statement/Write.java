@@ -8,6 +8,10 @@ import semantic.Visitor;
 import java.util.List;
 
 public class Write extends AbstractASTNode implements Statement {
+    public Expression getWriteVal() {
+        return writeVal;
+    }
+
     private Expression writeVal;
 
     public Write(int line, int column, Expression writeVal) {

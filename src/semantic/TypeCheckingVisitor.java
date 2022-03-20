@@ -119,7 +119,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(Read read, Void param) {
-        System.out.println("EL READ");
+        read.getReadVal().accept(this,param);
         return null;
     }
 
@@ -138,7 +138,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(Write write, Void param) {
-        System.out.println("EL WRITE");
+        write.getWriteVal().accept(this,param);
         return null;
     }
 
