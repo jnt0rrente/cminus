@@ -8,16 +8,16 @@ import semantic.Visitor;
 import java.util.List;
 
 public class Read extends AbstractASTNode implements Statement {
-    private List<Expression> readVal;
+    private Expression readVal;
 
-    public Read(int line, int column, List<Expression> readVal) {
+    public Read(int line, int column, Expression readVal) {
         super(line, column);
         this.readVal = readVal;
     }
 
     @Override
     public String toString() {
-        return "read " + readVal.size() + " values";
+        return "read " + readVal;
     }
 
     @Override

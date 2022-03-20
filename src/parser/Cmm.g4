@@ -61,29 +61,33 @@ function_invocation returns [Expression ast]:
 	;
 
 //Statement
-statement returns [Statement ast]:
-	e1=expression '=' e2=expression ';' {$ast = new Assignment($e1.ast.getLine(), $e1.ast.getColumn(),
-		$e1.ast, $e2.ast);}
-	| 'while' '(' e1=expression ')' b1=block {$ast = new WhileLoop($e1.ast.getLine(), $e1.ast.getColumn(),
-		$e1.ast, $b1.ast);}
-	| 'if' '(' e1=expression ')' b1=block 'else' b2=block {$ast = new IfElse($e1.ast.getLine(), $e1.ast.getColumn(),
-		$e1.ast, $b1.ast, $b2.ast);}
-	| 'if' '(' e1=expression ')' b1=block{$ast = new IfElse($e1.ast.getLine(), $e1.ast.getColumn(),
-		$e1.ast, $b1.ast);}
-	| 'return' e1=expression {$ast = new Return($e1.ast.getLine(), $e1.ast.getColumn(),
-		$e1.ast);} ';'
-	| s='read' r1=readWriteBlock {$ast = new Read($s.getLine(), $s.getCharPositionInLine()+1, $r1.ast);} ';'
-	| s='write' r1=readWriteBlock {$ast = new Write($s.getLine(), $s.getCharPositionInLine()+1, $r1.ast);} ';' //write 't', 'r', 'u', 'e', '\n';
-	| p1=procedure_invocation {$ast = $p1.ast;} ';'
+statement returns [List<Statement> ast = new ArrayList<Statement>()]:
+	e1=expression '=' e2=expression ';' {$ast.add(new Assignment($e1.ast.getLine(), $e1.ast.getColumn(),
+		$e1.ast, $e2.ast));}
+	| 'while' '(' e1=expression ')' b1=block {$ast.add(new WhileLoop($e1.ast.getLine(), $e1.ast.getColumn(),
+		$e1.ast, $b1.ast));}
+	| 'if' '(' e1=expression ')' b1=block 'else' b2=block {$ast.add(new IfElse($e1.ast.getLine(), $e1.ast.getColumn(),
+		$e1.ast, $b1.ast, $b2.ast));}
+	| 'if' '(' e1=expression ')' b1=block{$ast.add(new IfElse($e1.ast.getLine(), $e1.ast.getColumn(),
+		$e1.ast, $b1.ast));}
+	| 'return' e1=expression {$ast.add(new Return($e1.ast.getLine(), $e1.ast.getColumn(),
+		$e1.ast));} ';'
+	| s='read' rb=readBlock {for (Read r : $rb.ast) { $ast.add(r); }} ';'
+	| s='write' wb=writeBlock {for (Write w : $wb.ast) { $ast.add(w); }} ';'
+	| p1=procedure_invocation {$ast.add($p1.ast);} ';'
 	;
 
-readWriteBlock returns [List<Expression> ast = new ArrayList<Expression>()]:
-	(e1=expression {$ast.add($e1.ast);} (',' e2=expression {$ast.add($e2.ast);})*)
+readBlock returns [List<Read> ast = new ArrayList<Read>()]:
+	(e1=expression {$ast.add(new Read($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast));} (',' e2=expression {$ast.add(new Read($e2.ast.getLine(), $e2.ast.getColumn(), $e2.ast));})*)
+	;
+
+writeBlock returns [List<Write> ast = new ArrayList<Write>()]:
+	(e1=expression {$ast.add(new Write($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast));} (',' e2=expression {$ast.add(new Write($e2.ast.getLine(), $e2.ast.getColumn(), $e2.ast));})*)
 	;
 
 block returns [List<Statement> ast = new ArrayList<Statement>()]:
-    s1=statement {$ast.add($s1.ast);}
-	| '{' (s1=statement {$ast.add($s1.ast);})* '}'
+    s1=statement {$ast.addAll($s1.ast);}
+	| '{' (s1=statement {$ast.addAll($s1.ast);})* '}'
 	;
 
 procedure_invocation returns [FunctionInvocation ast]:
@@ -169,7 +173,7 @@ function_definition_body_variables returns [List<VariableDefinition> ast = new A
 	;
 
 function_definition_body_statements returns [List<Statement> ast = new ArrayList<Statement>()]:
-		(s1=statement{$ast.add($s1.ast);})*
+		(s1=statement{$ast.addAll($s1.ast);})*
 	;
 
 main_function_definition returns [FunctionDefinition ast]:
