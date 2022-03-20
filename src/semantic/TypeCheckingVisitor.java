@@ -14,7 +14,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         assignment.getRHS().accept(this, param);
 
         if (!assignment.getLHS().getLvalue()) {
-            new ErrorType(0,0,"L-value required");
+            new ErrorType(assignment.getLHS().getLine(),assignment.getLHS().getColumn(),"L-value required");
         }
         return null;
     }
