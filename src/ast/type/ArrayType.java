@@ -3,6 +3,7 @@ package ast.type;
 import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Type;
+import semantic.Visitor;
 
 public class ArrayType extends AbstractASTNode implements Type {
     public Expression size;
@@ -27,5 +28,10 @@ public class ArrayType extends AbstractASTNode implements Type {
         } else {
             this.elementType = type;
         }
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
+        return null;
     }
 }

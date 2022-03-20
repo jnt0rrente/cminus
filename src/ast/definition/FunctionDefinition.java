@@ -2,6 +2,7 @@ package ast.definition;
 
 import ast.Statement;
 import ast.Type;
+import semantic.Visitor;
 
 import java.util.List;
 
@@ -20,8 +21,21 @@ public class FunctionDefinition extends AbstractDefinition {
         this.bodyStatements = bodyStatements;
     }
 
+    public List<Statement> getBodyStatements() {
+        return bodyStatements;
+    }
+
+    public List<VariableDefinition> getBodyVariables() {
+        return bodyVariables;
+    }
+
     @Override
     public String toString() {
         return "Function definition: [name: "+ getName()+", " +bodyVariables.size()+" variables, "+bodyStatements.size()+" statements, type: " + functionType.toString() + "]";
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
+        return null;
     }
 }

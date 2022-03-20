@@ -2,6 +2,7 @@ package ast.expression;
 
 import ast.AbstractASTNode;
 import ast.Expression;
+import semantic.Visitor;
 
 public class Comparison extends AbstractExpression {
     private String operator;
@@ -16,8 +17,21 @@ public class Comparison extends AbstractExpression {
         this.operand2 = operand2;
     }
 
+    public Expression getOperand2() {
+        return operand2;
+    }
+
+    public Expression getOperand1() {
+        return operand1;
+    }
+
     @Override
     public String toString() {
         return (operand1 + " " + operator + " " + operand2);
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
+        return v.visit(this, param);
     }
 }

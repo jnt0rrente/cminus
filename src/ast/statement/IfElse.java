@@ -3,6 +3,7 @@ package ast.statement;
 import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Statement;
+import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,5 +36,10 @@ public class IfElse extends AbstractASTNode implements Statement {
         } else {
             return "if (" + condition + ") { body - size " + body.size() + "}";
         }
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
+        return null;
     }
 }

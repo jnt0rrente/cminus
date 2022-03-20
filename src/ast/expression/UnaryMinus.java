@@ -2,6 +2,7 @@ package ast.expression;
 
 import ast.AbstractASTNode;
 import ast.Expression;
+import semantic.Visitor;
 
 public class UnaryMinus extends AbstractExpression {
 
@@ -13,8 +14,17 @@ public class UnaryMinus extends AbstractExpression {
         this.target = target;
     }
 
+    public Expression getTarget() {
+        return target;
+    }
+
     @Override
     public String toString() {
         return ("!" + target);
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
+        return v.visit(this, param);
     }
 }

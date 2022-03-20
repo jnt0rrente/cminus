@@ -3,6 +3,7 @@ package ast.expression;
 import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Type;
+import semantic.Visitor;
 
 public class Cast extends AbstractExpression {
     private Type castType;
@@ -15,8 +16,17 @@ public class Cast extends AbstractExpression {
         this.exp = exp;
     }
 
+    public Expression getExp() {
+        return exp;
+    }
+
     @Override
     public String toString() {
         return ("("+ castType +") " + exp);
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
+        return v.visit(this, param);
     }
 }

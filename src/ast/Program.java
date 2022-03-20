@@ -15,7 +15,7 @@ public class Program extends AbstractASTNode {
 
     @Override
     public String toString() {
-        return "Program: " + definitions.size() + " definitions (plus main).";
+        return "Program: " + definitions.size() + " definitions.";
     }
 
     public List<Definition> getDefinitions() {
@@ -24,6 +24,6 @@ public class Program extends AbstractASTNode {
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
-        return null;
+        return v.visit(this, param);
     }
 }

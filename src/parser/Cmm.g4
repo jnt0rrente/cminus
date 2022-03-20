@@ -123,8 +123,8 @@ struct_body returns [List<RecordField> ast = new ArrayList<RecordField>()]:
 	;
 
 record_field_line returns [List<RecordField> ast = new ArrayList<RecordField>()]: //for the "int a, b, c" case
-	t1=type (i1=ID {$ast.add(new RecordField($i1.text, $t1.ast));}
-     (',' i2=ID {$ast.add(new RecordField($i2.text, $t1.ast));})*) ';'
+	t1=type (i1=ID {$ast.add(new RecordField($t1.ast.getLine(), $t1.ast.getColumn(), $i1.text, $t1.ast));}
+     (',' i2=ID {$ast.add(new RecordField($i2.getLine(), $i2.getCharPositionInLine()+1, $i2.text, $t1.ast));})*) ';'
 	;
 
 //definition
