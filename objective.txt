@@ -1,1 +1,2 @@
-Implement a syntax recognizer using ANLTR. The language is described in description.txt, and an example program is provided in input.txt.
+Implement the identification pass of the semantic analysis phase. Complete SymbolTable.java to make SymbolTableTest.java succeed. Then, implement the identification pass. Check the correct implementation showing input.txt with the introspector. The 4 error messages in input-wrong.txt must be prompted by the compiler.
+

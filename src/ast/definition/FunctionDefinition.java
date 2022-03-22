@@ -8,16 +8,16 @@ import java.util.List;
 
 public class FunctionDefinition extends AbstractDefinition {
 
-    private List<VariableDefinition> bodyVariables;
+    private List<VariableDefinition> bodyVariableDefinitions;
     private List<Statement> bodyStatements;
 
     private Type functionType;
 
     public FunctionDefinition(int line, int column, String name, Type functionType,
-                              List<VariableDefinition> bodyVariables, List<Statement> bodyStatements) {
+                              List<VariableDefinition> bodyVariableDefinitions, List<Statement> bodyStatements) {
         super(line, column, name);
         this.functionType = functionType;
-        this.bodyVariables = bodyVariables;
+        this.bodyVariableDefinitions = bodyVariableDefinitions;
         this.bodyStatements = bodyStatements;
     }
 
@@ -25,13 +25,13 @@ public class FunctionDefinition extends AbstractDefinition {
         return bodyStatements;
     }
 
-    public List<VariableDefinition> getBodyVariables() {
-        return bodyVariables;
+    public List<VariableDefinition> getBodyVariableDefinitions() {
+        return bodyVariableDefinitions;
     }
 
     @Override
     public String toString() {
-        return "Function definition: [name: "+ getName()+", " +bodyVariables.size()+" variables, "+bodyStatements.size()+" statements, type: " + functionType.toString() + "]";
+        return "Function definition: [name: "+ getName()+", " + bodyVariableDefinitions.size()+" variables, "+bodyStatements.size()+" statements, type: " + functionType.toString() + "]";
     }
 
     @Override

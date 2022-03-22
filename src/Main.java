@@ -5,7 +5,9 @@ import introspector.view.IntrospectorTree;
 import parser.*;
 
 import org.antlr.v4.runtime.*;
+import semantic.IdentificationVisitor;
 import semantic.TypeCheckingVisitor;
+import semantic.symboltable.SymbolTable;
 
 public class Main {
 	
@@ -25,6 +27,7 @@ public class Main {
 
 		Program ast = parser.program().ast;
 
+		ast.accept(new IdentificationVisitor(), new SymbolTable());
 		ast.accept(new TypeCheckingVisitor(), null);
 
 		if (ErrorHandler.getInstance().anyErrors())
