@@ -14,7 +14,16 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         assignment.getRHS().accept(this, param);
 
         if (!assignment.getLHS().getLvalue()) {
-            new ErrorType(assignment.getLHS().getLine(),assignment.getLHS().getColumn(),"L-value required");
+            new ErrorType(assignment.getLHS().getLine(),assignment.getLHS().getColumn(),"L-value required on assignment.");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visit(Read read, Void param) {
+        read.getReadVal().accept(this,param);
+        if (!read.getReadVal().getLvalue()) {
+            new ErrorType(read.getReadVal().getLine(), read.getReadVal().getColumn(), "L-value required on read.");
         }
         return null;
     }
@@ -117,11 +126,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-    @Override
-    public Void visit(Read read, Void param) {
-        read.getReadVal().accept(this,param);
-        return null;
-    }
 
     @Override
     public Void visit(Return ret, Void param) {
