@@ -11,12 +11,9 @@ public class FunctionDefinition extends AbstractDefinition {
     private List<VariableDefinition> bodyVariableDefinitions;
     private List<Statement> bodyStatements;
 
-    private Type functionType;
-
-    public FunctionDefinition(int line, int column, String name, Type functionType,
+    public FunctionDefinition(int line, int column, String name, Type type,
                               List<VariableDefinition> bodyVariableDefinitions, List<Statement> bodyStatements) {
-        super(line, column, name);
-        this.functionType = functionType;
+        super(line, column, name, type);
         this.bodyVariableDefinitions = bodyVariableDefinitions;
         this.bodyStatements = bodyStatements;
     }
@@ -31,7 +28,7 @@ public class FunctionDefinition extends AbstractDefinition {
 
     @Override
     public String toString() {
-        return "Function definition: [name: "+ getName()+", " + bodyVariableDefinitions.size()+" variables, "+bodyStatements.size()+" statements, type: " + functionType.toString() + "]";
+        return "Function definition: [name: "+ getName()+", " + bodyVariableDefinitions.size()+" variables, "+bodyStatements.size()+" statements, type: " + super.getType().toString() + "]";
     }
 
     @Override

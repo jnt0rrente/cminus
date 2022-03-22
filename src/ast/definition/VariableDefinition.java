@@ -4,16 +4,14 @@ import ast.*;
 import semantic.Visitor;
 
 public class VariableDefinition extends AbstractDefinition implements Expression, Definition {
-    private Type type;
 
     public VariableDefinition(int line, int column, String name, Type type) {
-        super(line, column, name);
-        this.type = type;
+        super(line, column, name, type);
     }
 
     @Override
     public String toString() {
-        return "Variable definition: [" + type.toString() + ", name: " + getName() + "]";
+        return "Variable definition: [" + super.getType().toString() + ", name: " + getName() + "]";
     }
 
     @Override
