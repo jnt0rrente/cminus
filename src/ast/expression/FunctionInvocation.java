@@ -21,6 +21,10 @@ public class FunctionInvocation extends AbstractExpression implements Statement 
         return parameters;
     }
 
+    public Variable getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return name.toString() + "(" + parameters.size()+" parameters)";

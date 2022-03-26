@@ -1,14 +1,14 @@
 package semantic;
 
 import ast.Definition;
-import ast.Statement;
 import ast.definition.FunctionDefinition;
 import ast.definition.VariableDefinition;
 import ast.expression.*;
 import ast.type.ErrorType;
 import ast.type.FunctionType;
-import ast.type.StructType;
 import semantic.symboltable.SymbolTable;
+
+import java.util.List;
 
 public class IdentificationVisitor extends AbstractVisitor<SymbolTable, Void>{
 
@@ -52,5 +52,12 @@ public class IdentificationVisitor extends AbstractVisitor<SymbolTable, Void>{
         return null;
     }
 
+    @Override
+    public Void visit(FunctionType functionType, SymbolTable param) {
+        List<VariableDefinition> parameterVariables = functionType.getParameterVariableDefinitions();
 
+        parameterVariables.forEach(variableDefinition -> variableDefinition.accept(this, param));
+
+        return null;
+    }
 }
