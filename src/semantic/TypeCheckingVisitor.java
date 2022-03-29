@@ -8,6 +8,15 @@ import ast.type.*;
 
 
 /*
+
+// definitions
+P: FunctionDefinition: type ID statement*
+R: for (Statement st : statement*) {
+        st.returnType = type.returnType;
+    }
+
+
+
 //expressions
 
 P: CharLiteral: expression -> CHAR_CONSTANT
@@ -58,7 +67,7 @@ P: Assignment: statement1 -> expression1 expression2
 R: expression1.type.isAssigned(expression2.type)
 
 P: IfElse: statement1 -> expression statement2* statement3*
-R: expression.type.asBoolean()
+R: expression.type.asBoolean() TODO
 
 P: Read: statement -> expression
 R: expression.type.readInto()
@@ -67,7 +76,7 @@ P: Return: statement -> expression
 R: expression.type.return(returnType)
 
 P: WhileLoop: statement1 -> expression statement2*
-R: expression.type.asBoolean()
+R: expression.type.asBoolean() TODO
 
 P: Write: statement -> expression
 R: expression.type.written()
