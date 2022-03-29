@@ -7,7 +7,6 @@ import semantic.Visitor;
 public class IntType extends AbstractASTNode implements Type {
     public IntType(int line, int column) {
         super(line, column);
-
     }
 
     @Override

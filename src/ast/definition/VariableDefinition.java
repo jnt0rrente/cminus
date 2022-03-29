@@ -3,7 +3,7 @@ package ast.definition;
 import ast.*;
 import semantic.Visitor;
 
-public class VariableDefinition extends AbstractDefinition implements Expression, Definition {
+public class VariableDefinition extends AbstractDefinition implements Statement, Definition {
 
     public VariableDefinition(int line, int column, String name, Type type) {
         super(line, column, name, type);
@@ -19,13 +19,4 @@ public class VariableDefinition extends AbstractDefinition implements Expression
         return v.visit(this,param);
     }
 
-    @Override
-    public boolean getLvalue() {
-        return false;
-    }
-
-    @Override
-    public void setLvalue(boolean lvalue) {
-
-    }
 }

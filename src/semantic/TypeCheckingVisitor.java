@@ -6,6 +6,74 @@ import ast.expression.*;
 import ast.statement.*;
 import ast.type.*;
 
+
+/*
+//expressions
+
+P: CharLiteral: expression -> CHAR_CONSTANT
+R: expression.type = new CharType()
+
+P: IntLiteral: expression -> INT_CONSTANT
+R: expression.type = new IntType()
+
+P: RealLiteral: expression -> REAL_CONSTANT
+R: expression.type = new RealType()
+
+P: Arithmetic: expression1 -> expression2 (+|-|*|/) expression3
+R: expression1.type = expression2.type.arithmetic(expression3.type)
+
+P: Cast: expression1 -> type expression2
+R: expression1.type = expression2.type.castTo(type)
+
+P: Comparison: expression1 -> expression2 expression3
+R: expression1.type = expression2.type.comparedTo(expression3.type)
+
+P: FieldAccess: expression1 -> expression2 ID
+R: expression1.type = expression2.type.dot(ID)
+
+P: FunctionInvocation: expression1 -> expression2 expression*
+R: List<Type> argTypes = expression3.stream().map(exp -> exp.type).collect(Collection.toList());
+   expression1.type = expression2.type.parentheses(argTypes)
+
+P: Indexing: expression1 -> expression2 expression3
+R: expression1.type = expression2.type.squareBrackets(expression3.type)
+
+P: Logical: expression1 -> expression2 expression3
+R: expression1.type = expression2.type.logical(expression3.type)
+
+P: UnaryMinus: expression1 -> expression2
+R: expression1.type = expression2.type.unaryMinus()
+
+P: UnaryNot: expression1 -> expression2
+R: expression1.type = expression2.type.unaryNot()
+
+P: Variable: expression1 -> ID
+R: expression1.type = (expression1.definition == null) ? new ErrorType() : expression1.definition.type
+
+
+
+// statement
+
+P: Assignment: statement1 -> expression1 expression2
+R: expression1.type.isAssigned(expression2.type)
+
+P: IfElse: statement1 -> expression statement2* statement3*
+R: expression.type.asBoolean()
+
+P: Read: statement -> expression
+R: expression.type.readInto()
+
+P: Return: statement -> expression
+R: expression.type.return(returnType)
+
+P: WhileLoop: statement1 -> expression statement2*
+R: expression.type.asBoolean()
+
+P: Write: statement -> expression
+R: expression.type.written()
+
+ */
+
 public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
