@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class StructType extends AbstractASTNode implements Type {
+public class StructType extends AbstractType {
     List<RecordField> records;
 
     public StructType(int line, int column, List<RecordField> records) {
@@ -21,6 +21,9 @@ public class StructType extends AbstractASTNode implements Type {
         this.records = records;
     }
 
+    public List<RecordField> getRecords() {
+        return records;
+    }
 
     @Override
     public String toString() {
@@ -45,6 +48,22 @@ public class StructType extends AbstractASTNode implements Type {
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
         return v.visit(this,param);
+    }
+
+    @Override
+    public Type dot(String name) {
+        for (RecordField r : getRecords()) {
+            if (r.getName().equals(name)) {
+                return r.getType();
+            }
+        }
+
+        return new ErrorType(0,0, String.format("Field %s does not exist.", name));
+    }
+
+    @Override
+    public String getTypeName() {
+        return "StructType";
     }
 }
 

@@ -1,10 +1,17 @@
 package semantic;
 
+import ast.Program;
+import ast.Statement;
 import ast.definition.FunctionDefinition;
 import ast.definition.VariableDefinition;
 import ast.expression.*;
 import ast.statement.*;
-import ast.type.*;
+import ast.type.CharType;
+import ast.type.DoubleType;
+import ast.type.ErrorType;
+import ast.type.IntType;
+
+import javax.swing.plaf.nimbus.State;
 
 
 /*
@@ -67,7 +74,13 @@ P: Assignment: statement1 -> expression1 expression2
 R: expression1.type.isAssigned(expression2.type)
 
 P: IfElse: statement1 -> expression statement2* statement3*
-R: expression.type.asBoolean() TODO
+R: expression.type.asBoolean()
+    for (Statement st : statement2*) {
+        st.returnType = type.returnType;
+    }
+    for (Statement st : statement3*) {
+        st.returnType = type.returnType;
+    }
 
 P: Read: statement -> expression
 R: expression.type.readInto()
@@ -76,7 +89,10 @@ P: Return: statement -> expression
 R: expression.type.return(returnType)
 
 P: WhileLoop: statement1 -> expression statement2*
-R: expression.type.asBoolean() TODO
+R: expression.type.asBoolean()
+    for (Statement st : statement2*) {
+        st.returnType = type.returnType;
+    }
 
 P: Write: statement -> expression
 R: expression.type.written()
@@ -85,37 +101,49 @@ R: expression.type.written()
 
 public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
-    @Override
-    public Void visit(Assignment assignment, Void param) {
-        assignment.getLHS().accept(this, param);
-        assignment.getRHS().accept(this, param);
 
-        if (!assignment.getLHS().getLvalue()) {
-            new ErrorType(assignment.getLHS().getLine(),assignment.getLHS().getColumn(),"L-value required on assignment.");
+    @Override
+    public Void visit(FunctionDefinition functionDefinition, Void param) {
+        functionDefinition.getBodyStatements().forEach(def -> def.accept(this,param));
+        functionDefinition.getBodyVariableDefinitions().forEach(def -> def.accept(this, param));
+        functionDefinition.getType().accept(this,param);
+
+        for (Statement st : functionDefinition.getBodyStatements()) {
+            st.setReturnType(functionDefinition.getType());
         }
+
         return null;
     }
 
     @Override
-    public Void visit(Read read, Void param) {
-        read.getReadVal().accept(this,param);
-        if (!read.getReadVal().getLvalue()) {
-            new ErrorType(read.getReadVal().getLine(), read.getReadVal().getColumn(), "L-value required on read.");
-        }
+    public Void visit(CharLiteral charLiteral, Void param) {
+        charLiteral.setLvalue(false);
+        charLiteral.setType(new CharType(charLiteral.getLine(), charLiteral.getColumn()));
         return null;
     }
 
     @Override
-    public Void visit(Variable variable, Void param) {
-        variable.setLvalue(true);
+    public Void visit(IntLiteral intLiteral, Void param) {
+        intLiteral.setLvalue(false);
+        intLiteral.setType(new IntType(intLiteral.getLine(), intLiteral.getColumn()));
         return null;
     }
+
+    @Override
+    public Void visit(RealLiteral realLiteral, Void param) {
+        realLiteral.setLvalue(false);
+        realLiteral.setType(new DoubleType(realLiteral.getLine(), realLiteral.getColumn()));
+        return null;
+    }
+
 
     @Override
     public Void visit(Arithmetic arithmetic, Void param) {
         arithmetic.getOperand1().accept(this, param);
         arithmetic.getOperand2().accept(this, param);
         arithmetic.setLvalue(false);
+
+
         return null;
     }
 
@@ -123,12 +151,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(Cast cast, Void param) {
         cast.getExp().accept(this, param);
         cast.setLvalue(false);
-        return null;
-    }
-
-    @Override
-    public Void visit(CharLiteral charLiteral, Void param) {
-        charLiteral.setLvalue(false);
         return null;
     }
 
@@ -161,11 +183,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-    @Override
-    public Void visit(IntLiteral intLiteral, Void param) {
-        intLiteral.setLvalue(false);
-        return null;
-    }
 
     @Override
     public Void visit(Logical logical, Void param) {
@@ -175,11 +192,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
-    @Override
-    public Void visit(RealLiteral realLiteral, Void param) {
-        realLiteral.setLvalue(false);
-        return null;
-    }
 
     @Override
     public Void visit(UnaryMinus unaryMinus, Void param) {
@@ -188,10 +200,59 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
+
     @Override
     public Void visit(UnaryNot unaryNot, Void param) {
         unaryNot.getTarget().accept(this,param);
         unaryNot.setLvalue(false);
+        return null;
+    }
+
+
+
+    @Override
+    public Void visit(IfElse ifElse, Void param) {
+        return super.visit(ifElse, param);
+    }
+
+    @Override
+    public Void visit(Return ret, Void param) {
+        return super.visit(ret, param);
+    }
+
+    @Override
+    public Void visit(WhileLoop whileLoop, Void param) {
+        return super.visit(whileLoop, param);
+    }
+
+    @Override
+    public Void visit(Write write, Void param) {
+        return super.visit(write, param);
+    }
+
+    @Override
+    public Void visit(Assignment assignment, Void param) {
+        assignment.getLHS().accept(this, param);
+        assignment.getRHS().accept(this, param);
+
+        if (!assignment.getLHS().getLvalue()) {
+            new ErrorType(assignment.getLHS().getLine(),assignment.getLHS().getColumn(),"L-value required on assignment.");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visit(Read read, Void param) {
+        read.getReadVal().accept(this,param);
+        if (!read.getReadVal().getLvalue()) {
+            new ErrorType(read.getReadVal().getLine(), read.getReadVal().getColumn(), "L-value required on read.");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visit(Variable variable, Void param) {
+        variable.setLvalue(true);
         return null;
     }
 

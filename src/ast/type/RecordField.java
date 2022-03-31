@@ -23,6 +23,10 @@ public class RecordField extends AbstractASTNode {
         return name;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
         return v.visit(this,param);

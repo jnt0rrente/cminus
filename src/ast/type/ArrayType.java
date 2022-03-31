@@ -5,7 +5,9 @@ import ast.Expression;
 import ast.Type;
 import semantic.Visitor;
 
-public class ArrayType extends AbstractASTNode implements Type {
+import java.util.List;
+
+public class ArrayType extends AbstractType {
     public Expression size;
     public Type elementType;
 
@@ -20,8 +22,6 @@ public class ArrayType extends AbstractASTNode implements Type {
         return "Array [type: " + elementType + " size: " + size + "]";
     }
 
-    // for the record, I am aware this is unorthodox to say the least,
-    // but I'd rather use this than have my arrays inverted.
     public void setType(Type type) {
         if (this.elementType instanceof ArrayType) {
             ((ArrayType) this.elementType).setType(type);
@@ -33,5 +33,19 @@ public class ArrayType extends AbstractASTNode implements Type {
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
         return v.visit(this, param);
+    }
+
+    @Override
+    public Type squareBrackets(Type type2) {
+        if (type2 instanceof IntType) {
+            return this.elementType;
+        } else {
+            return super.squareBrackets(type2);
+        }
+    }
+
+    @Override
+    public String getTypeName() {
+        return "ArrayType";
     }
 }

@@ -5,7 +5,9 @@ import ast.Type;
 import errorhandler.ErrorHandler;
 import semantic.Visitor;
 
-public class ErrorType extends AbstractASTNode implements Type {
+import java.util.List;
+
+public class ErrorType extends AbstractType {
 
     private String message;
 
@@ -23,5 +25,10 @@ public class ErrorType extends AbstractASTNode implements Type {
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
         return v.visit(this,param);
+    }
+
+    @Override
+    public String getTypeName() {
+        return "ErrorType";
     }
 }

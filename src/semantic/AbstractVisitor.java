@@ -109,6 +109,8 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
     @Override
     public TR visit(FunctionDefinition functionDefinition, TP param) {
         functionDefinition.getBodyStatements().forEach(def -> def.accept(this,param));
+        functionDefinition.getBodyVariableDefinitions().forEach(def -> def.accept(this, param));
+        functionDefinition.getType().accept(this,param);
         return null;
     }
 
