@@ -36,7 +36,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(Cast cast, TP param) {
-        cast.getExp().accept(this, param);
+        cast.getExpression().accept(this, param);
         return null;
     }
 
@@ -54,14 +54,14 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(FieldAccess fieldAccess, TP param) {
-        fieldAccess.getExp().accept(this, param);
+        fieldAccess.getExpression().accept(this, param);
         return null;
     }
 
     @Override
     public TR visit(FunctionInvocation functionInvocation, TP param) {
         functionInvocation.getParameters().forEach(def -> def.accept(this, param));
-        functionInvocation.getName().accept(this, param);
+        functionInvocation.getVariable().accept(this, param);
         return null;
     }
 

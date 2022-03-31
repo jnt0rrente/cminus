@@ -1,9 +1,9 @@
 package semantic;
 
-import ast.Program;
+import ast.Expression;
 import ast.Statement;
+import ast.Type;
 import ast.definition.FunctionDefinition;
-import ast.definition.VariableDefinition;
 import ast.expression.*;
 import ast.statement.*;
 import ast.type.CharType;
@@ -11,7 +11,9 @@ import ast.type.DoubleType;
 import ast.type.ErrorType;
 import ast.type.IntType;
 
-import javax.swing.plaf.nimbus.State;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 
 /*
@@ -143,14 +145,22 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         arithmetic.getOperand2().accept(this, param);
         arithmetic.setLvalue(false);
 
+        Type type1 = arithmetic.getOperand1().getType(); //clarity
+        Type type2 = arithmetic.getOperand2().getType();
+        arithmetic.setType(type1.arithmetic(type2));
 
         return null;
     }
 
     @Override
     public Void visit(Cast cast, Void param) {
-        cast.getExp().accept(this, param);
+        cast.getExpression().accept(this, param);
         cast.setLvalue(false);
+
+        Type castedType = cast.getExpression().getType();
+        Type targetType = cast.getCastType();
+        cast.setType(castedType.castTo(targetType));
+
         return null;
     }
 
@@ -159,20 +169,33 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         comparison.getOperand1().accept(this, param);
         comparison.getOperand2().accept(this, param);
         comparison.setLvalue(false);
+
+        Type type1 = comparison.getOperand1().getType();
+        Type type2 = comparison.getOperand2().getType();
+        comparison.setType(type1.comparedTo(type2));
         return null;
     }
 
     @Override
     public Void visit(FieldAccess fieldAccess, Void param) {
-        fieldAccess.getExp().accept(this, param);
+        fieldAccess.getExpression().accept(this, param);
         fieldAccess.setLvalue(true);
+
+        Type type = fieldAccess.getExpression().getType();
+        String name = fieldAccess.getName();
+        fieldAccess.setType(type.dot(name));
         return null;
     }
 
     @Override
     public Void visit(FunctionInvocation functionInvocation, Void param) {
         functionInvocation.getParameters().forEach(def -> def.accept(this, param));
+        functionInvocation.getVariable().accept(this, param);
         functionInvocation.setLvalue(false);
+
+        Type returnType = functionInvocation.getVariable().getType();
+        List<Type> parameterTypes = functionInvocation.getParameters().stream().map(Expression::getType).collect(Collectors.toList());
+        functionInvocation.setType(returnType.parentheses(parameterTypes));
         return null;
     }
 
@@ -180,6 +203,10 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(Indexing indexing, Void param) {
         indexing.getArray().accept(this, param);
         indexing.setLvalue(true);
+
+        Type type1 = indexing.getArray().getType();
+        Type type2 = indexing.getIndex().getType();
+        indexing.setType(type1.squareBrackets(type2));
         return null;
     }
 
@@ -189,6 +216,10 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         logical.getOperand1().accept(this,param);
         logical.getOperand2().accept(this, param);
         logical.setLvalue(false);
+
+        Type type1 = logical.getOperand1().getType();
+        Type type2 = logical.getOperand2().getType();
+        logical.setType(type1.logical(type2));
         return null;
     }
 
@@ -197,6 +228,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(UnaryMinus unaryMinus, Void param) {
         unaryMinus.getTarget().accept(this,param);
         unaryMinus.setLvalue(false);
+
+        Type type1 = unaryMinus.getTarget().getType();
+        unaryMinus.setType(type1.unaryMinus());
         return null;
     }
 
@@ -205,14 +239,19 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(UnaryNot unaryNot, Void param) {
         unaryNot.getTarget().accept(this,param);
         unaryNot.setLvalue(false);
+
+        Type type1 = unaryNot.getTarget().getType();
+        unaryNot.setType(type1.unaryNot());
         return null;
     }
 
-
-
     @Override
     public Void visit(IfElse ifElse, Void param) {
-        return super.visit(ifElse, param);
+        ifElse.getCondition().accept(this, param);
+        ifElse.getBody().forEach(s -> s.accept(this, param));
+        ifElse.getBodyElse().forEach(s -> s.accept(this, param));
+
+        return null;
     }
 
     @Override

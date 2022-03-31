@@ -1,28 +1,31 @@
 package ast.expression;
 
-import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Type;
 import semantic.Visitor;
 
 public class Cast extends AbstractExpression {
     private Type castType;
-    private Expression exp;
+    private Expression expression;
 
-    public Cast(int line, int column, Type castType, Expression exp) {
+    public Cast(int line, int column, Type castType, Expression expression) {
         super(line, column);
 
         this.castType = castType;
-        this.exp = exp;
+        this.expression = expression;
     }
 
-    public Expression getExp() {
-        return exp;
+    public Type getCastType() {
+        return castType;
+    }
+
+    public Expression getExpression() {
+        return expression;
     }
 
     @Override
     public String toString() {
-        return ("("+ castType +") " + exp);
+        return ("("+ castType +") " + expression);
     }
 
     @Override

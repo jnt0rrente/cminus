@@ -1,19 +1,19 @@
 package ast.expression;
 
-import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Statement;
+import ast.Type;
 import semantic.Visitor;
 
 import java.util.List;
 
 public class FunctionInvocation extends AbstractExpression implements Statement {
-    private Variable name;
+    private Variable variable;
     private List<Expression> parameters;
 
     public FunctionInvocation(int line, int column, Variable name, List<Expression> parameters) {
         super(line, column);
-        this.name = name;
+        this.variable = name;
         this.parameters = parameters;
     }
 
@@ -21,17 +21,27 @@ public class FunctionInvocation extends AbstractExpression implements Statement 
         return parameters;
     }
 
-    public Variable getName() {
-        return name;
+    public Variable getVariable() {
+        return variable;
     }
 
     @Override
     public String toString() {
-        return name.toString() + "(" + parameters.size()+" parameters)";
+        return variable.toString() + "(" + parameters.size()+" parameters)";
     }
 
     @Override
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
         return v.visit(this, param);
+    }
+
+    @Override
+    public void setReturnType(Type type) {
+
+    }
+
+    @Override
+    public Type getReturnType() {
+        return null;
     }
 }

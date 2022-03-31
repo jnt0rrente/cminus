@@ -1,27 +1,30 @@
 package ast.expression;
 
-import ast.AbstractASTNode;
 import ast.Expression;
 import semantic.Visitor;
 
 public class FieldAccess extends AbstractExpression {
     private String name;
-    private Expression exp;
+    private Expression expression;
 
-    public FieldAccess(int line, int column, String name, Expression exp) {
+    public FieldAccess(int line, int column, String name, Expression expression) {
         super(line,column);
 
         this.name = name;
-        this.exp = exp;
+        this.expression = expression;
     }
 
-    public Expression getExp() {
-        return exp;
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
     public String toString() {
-        return exp + "." + name;
+        return expression + "." + name;
     }
 
     @Override
