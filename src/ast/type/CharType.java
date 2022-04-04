@@ -22,7 +22,9 @@ public class CharType extends AbstractType {
 
     @Override
     public Type castTo(Type type2) {
-        if (type2 instanceof IntType) return new IntType(0,0);
+        if (type2 instanceof IntType) return type2;
+        if (type2 instanceof DoubleType) return type2;
+        if (type2 instanceof CharType) return this;
         return super.castTo(type2);
     }
 

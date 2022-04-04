@@ -45,8 +45,8 @@ public class FunctionType extends AbstractType {
                 if (argTypes.get(i).getClass() != declaredParams.get(i).getType().getClass()) {
                     return new ErrorType(this.getLine(), this.getColumn(),
                             "Wrong type on parameter " + i + ":"
-                                    + " Expected " + declaredParams.get(i).getType().getClass().getSimpleName()
-                                    + " but got " + argTypes.get(i));
+                                    + " Expected " + declaredParams.get(i).getType().getTypeName()
+                                    + " but got " + argTypes.get(i).getTypeName());
                 }
             }
         }

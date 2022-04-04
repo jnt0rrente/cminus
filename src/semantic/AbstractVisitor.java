@@ -69,6 +69,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
     @Override
     public TR visit(Indexing indexing, TP param) {
         indexing.getArray().accept(this, param);
+        indexing.getIndex().accept(this, param);
         return null;
     }
 

@@ -49,4 +49,12 @@ public class DoubleType extends AbstractType {
     public void written() {
 
     }
+
+    @Override
+    public Type castTo(Type type2) {
+        if (type2 instanceof IntType) return type2;
+        if (type2 instanceof DoubleType) return this;
+        if (type2 instanceof CharType) return type2;
+        return super.castTo(type2);
+    }
 }
