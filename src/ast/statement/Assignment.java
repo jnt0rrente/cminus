@@ -5,7 +5,7 @@ import ast.Expression;
 import ast.Statement;
 import semantic.Visitor;
 
-public class Assignment extends AbstractASTNode implements Statement {
+public class Assignment extends AbstractStatement implements Statement {
     private Expression lhs;
     private Expression rhs;
 

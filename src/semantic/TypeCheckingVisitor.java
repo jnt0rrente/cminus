@@ -106,13 +106,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(FunctionDefinition functionDefinition, Void param) {
-        functionDefinition.getBodyStatements().forEach(def -> def.accept(this,param));
-        functionDefinition.getBodyVariableDefinitions().forEach(def -> def.accept(this, param));
-        functionDefinition.getType().accept(this,param);
-
         for (Statement st : functionDefinition.getBodyStatements()) {
             st.setReturnType(functionDefinition.getType());
         }
+
+        functionDefinition.getBodyStatements().forEach(def -> def.accept(this, param));
+        functionDefinition.getBodyVariableDefinitions().forEach(def -> def.accept(this, param));
+        functionDefinition.getType().accept(this, param);
 
         return null;
     }
@@ -213,7 +213,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(Logical logical, Void param) {
-        logical.getOperand1().accept(this,param);
+        logical.getOperand1().accept(this, param);
         logical.getOperand2().accept(this, param);
         logical.setLvalue(false);
 
@@ -226,7 +226,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(UnaryMinus unaryMinus, Void param) {
-        unaryMinus.getTarget().accept(this,param);
+        unaryMinus.getTarget().accept(this, param);
         unaryMinus.setLvalue(false);
 
         Type type1 = unaryMinus.getTarget().getType();
@@ -237,7 +237,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(UnaryNot unaryNot, Void param) {
-        unaryNot.getTarget().accept(this,param);
+        unaryNot.getTarget().accept(this, param);
         unaryNot.setLvalue(false);
 
         Type type1 = unaryNot.getTarget().getType();
@@ -245,28 +245,50 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         return null;
     }
 
+
+    //statements
     @Override
     public Void visit(IfElse ifElse, Void param) {
         ifElse.getCondition().accept(this, param);
         ifElse.getBody().forEach(s -> s.accept(this, param));
         ifElse.getBodyElse().forEach(s -> s.accept(this, param));
 
+        ifElse.getCondition().getType().asBoolean();
+        for (Statement st : ifElse.getBody()) {
+            st.setReturnType(ifElse.getReturnType());
+        }
+        for (Statement st : ifElse.getBodyElse()) {
+            st.setReturnType(ifElse.getReturnType());
+        }
+
         return null;
     }
 
     @Override
     public Void visit(Return ret, Void param) {
-        return super.visit(ret, param);
+        ret.getReturnValue().getType().returnedAs(ret.getReturnType());
+        return null;
     }
 
     @Override
     public Void visit(WhileLoop whileLoop, Void param) {
-        return super.visit(whileLoop, param);
+        whileLoop.getCondition().accept(this, param);
+        whileLoop.getBody().forEach(statement -> statement.accept(this, param));
+
+        whileLoop.getCondition().getType().asBoolean();
+        for (Statement st : whileLoop.getBody()) {
+            st.setReturnType(whileLoop.getReturnType());
+        }
+        return null;
     }
 
     @Override
     public Void visit(Write write, Void param) {
-        return super.visit(write, param);
+        write.getWriteVal().accept(this, param);
+
+        write.getWriteVal().getType().written();
+
+        return null;
     }
 
     @Override
@@ -275,14 +297,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         assignment.getRHS().accept(this, param);
 
         if (!assignment.getLHS().getLvalue()) {
-            new ErrorType(assignment.getLHS().getLine(),assignment.getLHS().getColumn(),"L-value required on assignment.");
+            new ErrorType(assignment.getLHS().getLine(), assignment.getLHS().getColumn(), "L-value required on assignment.");
         }
         return null;
     }
 
     @Override
     public Void visit(Read read, Void param) {
-        read.getReadVal().accept(this,param);
+        read.getReadVal().accept(this, param);
         if (!read.getReadVal().getLvalue()) {
             new ErrorType(read.getReadVal().getLine(), read.getReadVal().getColumn(), "L-value required on read.");
         }

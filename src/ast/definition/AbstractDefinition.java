@@ -24,10 +24,12 @@ public abstract class AbstractDefinition extends AbstractASTNode implements Defi
         this.scope = scope;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public Type getType() {
         return type;
     }

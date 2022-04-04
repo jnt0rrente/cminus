@@ -7,7 +7,7 @@ import semantic.Visitor;
 
 import java.util.List;
 
-public class Write extends AbstractASTNode implements Statement {
+public class Write extends AbstractStatement implements Statement {
     public Expression getWriteVal() {
         return writeVal;
     }

@@ -8,7 +8,7 @@ import semantic.Visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IfElse extends AbstractASTNode implements Statement {
+public class IfElse extends AbstractStatement implements Statement {
     private Expression condition;
     private List<Statement> body;
     private List<Statement> bodyElse;

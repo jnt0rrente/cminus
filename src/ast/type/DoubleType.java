@@ -44,4 +44,9 @@ public class DoubleType extends AbstractType {
     public String getTypeName() {
         return "DoubleType";
     }
+
+    @Override
+    public void written() {
+
+    }
 }

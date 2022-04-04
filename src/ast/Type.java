@@ -23,4 +23,9 @@ public interface Type extends ASTNode {
 
     public String getTypeName();
 
+    public void asBoolean();
+
+    public void returnedAs(Type returnType);
+
+    public void written();
 }

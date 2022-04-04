@@ -7,7 +7,7 @@ import semantic.Visitor;
 
 import java.util.List;
 
-public class Read extends AbstractASTNode implements Statement {
+public class Read extends AbstractStatement implements Statement {
     private Expression readVal;
 
     public Expression getReadVal() {

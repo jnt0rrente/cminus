@@ -30,4 +30,16 @@ public class CharType extends AbstractType {
     public String getTypeName() {
         return "CharType";
     }
+
+    @Override
+    public void returnedAs(Type type2) {
+        if (type2 instanceof IntType) return;
+        if (type2 instanceof DoubleType) return;
+        super.returnedAs(type2);
+    }
+
+    @Override
+    public void written() {
+
+    }
 }

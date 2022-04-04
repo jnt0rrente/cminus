@@ -7,7 +7,7 @@ import semantic.Visitor;
 
 import java.util.List;
 
-public class WhileLoop extends AbstractASTNode implements Statement {
+public class WhileLoop extends AbstractStatement implements Statement {
     private Expression condition;
     private List<Statement> body;
 

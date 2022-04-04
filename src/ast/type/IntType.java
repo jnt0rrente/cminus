@@ -66,4 +66,20 @@ public class IntType extends AbstractType {
     public String getTypeName() {
         return "IntType";
     }
+
+    @Override
+    public void asBoolean() {
+
+    }
+
+    @Override
+    public void returnedAs(Type type2) {
+        if (type2 instanceof DoubleType) return;
+        super.returnedAs(type2);
+    }
+
+    @Override
+    public void written() {
+
+    }
 }

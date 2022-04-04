@@ -5,7 +5,7 @@ import ast.Expression;
 import ast.Statement;
 import semantic.Visitor;
 
-public class Return extends AbstractASTNode implements Statement {
+public class Return extends AbstractStatement implements Statement {
     private Expression returnValue;
 
     public Expression getReturnValue() {

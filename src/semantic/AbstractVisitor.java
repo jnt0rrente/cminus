@@ -1,5 +1,6 @@
 package semantic;
 
+import ast.Definition;
 import ast.Program;
 import ast.definition.FunctionDefinition;
 import ast.definition.VariableDefinition;
@@ -102,7 +103,9 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(Program program, TP param) {
-        program.getDefinitions().forEach(def -> def.accept(this,param));
+        for (Definition def : program.getDefinitions()) {
+            def.accept(this, param);
+        }
         return null;
     }
 

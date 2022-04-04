@@ -1,6 +1,7 @@
 package ast.definition;
 
 import ast.*;
+import ast.statement.AbstractStatement;
 import semantic.Visitor;
 
 public class VariableDefinition extends AbstractDefinition implements Statement, Definition {
@@ -19,4 +20,13 @@ public class VariableDefinition extends AbstractDefinition implements Statement,
         return v.visit(this,param);
     }
 
+    @Override
+    public void setReturnType(Type type) {
+
+    }
+
+    @Override
+    public Type getReturnType() {
+        return null;
+    }
 }
