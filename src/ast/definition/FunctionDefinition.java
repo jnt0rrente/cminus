@@ -7,7 +7,6 @@ import semantic.Visitor;
 import java.util.List;
 
 public class FunctionDefinition extends AbstractDefinition {
-
     private List<VariableDefinition> bodyVariableDefinitions;
     private List<Statement> bodyStatements;
 

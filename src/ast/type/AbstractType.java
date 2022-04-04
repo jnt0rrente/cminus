@@ -81,4 +81,9 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public void written() {
         new ErrorType(0,0, String.format("Cannot write %s.",this.getTypeName()));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.getClass().equals(obj.getClass());
+    }
 }
