@@ -57,4 +57,9 @@ public class DoubleType extends AbstractType {
         if (type2 instanceof CharType) return type2;
         return super.castTo(type2);
     }
+
+    @Override
+    public int numberOfBytes() {
+        return 4;
+    }
 }

@@ -1,11 +1,8 @@
 package ast.type;
 
-import ast.AbstractASTNode;
 import ast.Expression;
 import ast.Type;
 import semantic.Visitor;
-
-import java.util.List;
 
 public class ArrayType extends AbstractType {
     public Expression size;
@@ -47,5 +44,26 @@ public class ArrayType extends AbstractType {
     @Override
     public String getTypeName() {
         return "ArrayType";
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return elementType.numberOfBytes() * size.value;
+    }
+
+    public Expression getSize() {
+        return size;
+    }
+
+    public void setSize(Expression size) {
+        this.size = size;
+    }
+
+    public Type getElementType() {
+        return elementType;
+    }
+
+    public void setElementType(Type elementType) {
+        this.elementType = elementType;
     }
 }

@@ -7,6 +7,7 @@ import semantic.Visitor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class StructType extends AbstractType {
     List<RecordField> records;
@@ -64,6 +65,11 @@ public class StructType extends AbstractType {
     @Override
     public String getTypeName() {
         return "StructType";
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return records.stream().mapToInt(recordField -> recordField.getType().numberOfBytes()).sum();
     }
 }
 

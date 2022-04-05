@@ -31,4 +31,9 @@ public class ErrorType extends AbstractType {
     public String getTypeName() {
         return "ErrorType";
     }
+
+    @Override
+    public int numberOfBytes() {
+        return 0;
+    }
 }

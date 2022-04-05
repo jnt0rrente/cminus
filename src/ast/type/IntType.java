@@ -82,4 +82,9 @@ public class IntType extends AbstractType {
     public void written() {
 
     }
+
+    @Override
+    public int numberOfBytes() {
+        return 1;
+    }
 }

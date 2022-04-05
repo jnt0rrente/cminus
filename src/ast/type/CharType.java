@@ -7,7 +7,6 @@ import semantic.Visitor;
 public class CharType extends AbstractType {
     public CharType(int line, int column) {
         super(line, column);
-
     }
 
     @Override
@@ -43,5 +42,10 @@ public class CharType extends AbstractType {
     @Override
     public void written() {
 
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return 1;
     }
 }

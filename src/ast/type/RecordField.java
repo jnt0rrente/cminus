@@ -7,6 +7,7 @@ import semantic.Visitor;
 public class RecordField extends AbstractASTNode {
     private String name;
     private Type type;
+    private int offset;
 
     public RecordField(int line, int column, String name, Type type) {
         super(line, column);
@@ -31,4 +32,13 @@ public class RecordField extends AbstractASTNode {
     public <TP, TR> TR accept(Visitor<TP, TR> v, TP param) {
         return v.visit(this,param);
     }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
 }

@@ -28,4 +28,6 @@ public interface Type extends ASTNode {
     public void returnedAs(Type returnType);
 
     public void written();
+
+    public int numberOfBytes();
 }

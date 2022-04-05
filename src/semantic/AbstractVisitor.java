@@ -19,7 +19,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(Read read, TP param) {
-        read.getReadVal().accept(this,param);
+        read.getReadVal().accept(this, param);
         return null;
     }
 
@@ -80,7 +80,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(Logical logical, TP param) {
-        logical.getOperand1().accept(this,param);
+        logical.getOperand1().accept(this, param);
         logical.getOperand2().accept(this, param);
         return null;
     }
@@ -92,13 +92,13 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(UnaryMinus unaryMinus, TP param) {
-        unaryMinus.getTarget().accept(this,param);
+        unaryMinus.getTarget().accept(this, param);
         return null;
     }
 
     @Override
     public TR visit(UnaryNot unaryNot, TP param) {
-        unaryNot.getTarget().accept(this,param);
+        unaryNot.getTarget().accept(this, param);
         return null;
     }
 
@@ -112,9 +112,9 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(FunctionDefinition functionDefinition, TP param) {
-        functionDefinition.getBodyStatements().forEach(def -> def.accept(this,param));
+        functionDefinition.getBodyStatements().forEach(def -> def.accept(this, param));
         functionDefinition.getBodyVariableDefinitions().forEach(def -> def.accept(this, param));
-        functionDefinition.getType().accept(this,param);
+        functionDefinition.getType().accept(this, param);
         return null;
     }
 
@@ -148,11 +148,9 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(Write write, TP param) {
-        write.getWriteVal().accept(this,param);
+        write.getWriteVal().accept(this, param);
         return null;
     }
-
-
 
     @Override
     public TR visit(CharType charType, TP param) {
@@ -171,6 +169,9 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(FunctionType functionType, TP param) {
+        functionType.getReturnType().accept(this, param);
+        functionType.getParameterVariableDefinitions()
+                .forEach(variableDefinition -> variableDefinition.accept(this, param));
         return null;
     }
 
@@ -181,11 +182,14 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(RecordField recordField, TP param) {
+        recordField.getType().accept(this, param);
         return null;
     }
 
     @Override
     public TR visit(StructType structType, TP param) {
+        structType.getRecords().forEach(recordField -> recordField.accept(this, param));
+
         return null;
     }
 
@@ -196,6 +200,8 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(ArrayType arrayType, TP param) {
+        arrayType.getElementType().accept(this, param);
+        arrayType.getSize().accept(this,param);
         return null;
     }
 }
