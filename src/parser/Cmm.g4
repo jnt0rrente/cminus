@@ -47,9 +47,13 @@ expression returns [Expression ast]:
 			$op.text, $e1.ast, $e2.ast);}
 	| f1=function_invocation {$ast = $f1.ast;}
 	| id=variable {$ast = $id.ast;}
-	| i1=INT_CONSTANT  {$ast = new IntLiteral($i1.getLine(), $i1.getCharPositionInLine()+1, LexerHelper.lexemeToInt($i1.text)); }
+	| i1=intLiteral  {$ast = $i1.ast; }
 	| r1=REAL_CONSTANT {$ast = new RealLiteral($r1.getLine(), $r1.getCharPositionInLine()+1, LexerHelper.lexemeToReal($r1.text)); }
 	| c1=CHAR_CONSTANT {$ast = new CharLiteral($c1.getLine(), $c1.getCharPositionInLine()+1, LexerHelper.lexemeToChar($c1.text)); }
+	;
+
+intLiteral returns [IntLiteral ast]:
+	i1=INT_CONSTANT  {$ast = new IntLiteral($i1.getLine(), $i1.getCharPositionInLine()+1, LexerHelper.lexemeToInt($i1.text)); }
 	;
 
 variable returns [Variable ast]:
@@ -102,8 +106,8 @@ arguments returns [List<Expression> ast = new ArrayList<Expression>()]:
 
 //Type
 type returns [Type ast]:
-	t1=type '[' e1=expression ']' {$ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), $e1.ast, $t1.ast);}
-		('[' e2=expression ']'{((ArrayType)$ast).setType(new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), $e2.ast, $t1.ast));})*
+	t1=type '[' e1=intLiteral ']' {$ast = new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), $e1.ast, $t1.ast);}
+		('[' e2=intLiteral ']'{((ArrayType)$ast).setType(new ArrayType($t1.ast.getLine(), $t1.ast.getColumn(), $e2.ast, $t1.ast));})*
 	| b1=builtin_type {$ast = $b1.ast;}
 	| s1=struct_type {$ast = $s1.ast;}
 	;

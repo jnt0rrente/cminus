@@ -54,7 +54,8 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 
         int globalsBytesSum = 0;
         for (Definition def : program.getDefinitions()) {
-            if (def instanceof VariableDefinition varDef) {
+            if (def instanceof VariableDefinition) {
+                VariableDefinition varDef = (VariableDefinition) def;
                 varDef.setOffset(globalsBytesSum);
                 globalsBytesSum += def.getType().numberOfBytes();
             }
@@ -84,7 +85,7 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
         functionType.getReturnType().accept(this,param);
 
         int paramsOnTheRightBytesSum = 0;
-        for (int i = functionType.getParameterVariableDefinitions().size()-1; i > 0 ; i--) {
+        for (int i = functionType.getParameterVariableDefinitions().size()-1; i >= 0 ; i--) {
             VariableDefinition variableDefinition = functionType.getParameterVariableDefinitions().get(i);
             variableDefinition.setOffset(4 + paramsOnTheRightBytesSum);
             paramsOnTheRightBytesSum += variableDefinition.getType().numberOfBytes();

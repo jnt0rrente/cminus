@@ -23,4 +23,9 @@ public class VoidType extends AbstractType {
     public String getTypeName() {
         return "VoidType";
     }
+
+    @Override
+    public int numberOfBytes() {
+        return 0;
+    }
 }

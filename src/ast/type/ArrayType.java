@@ -2,13 +2,14 @@ package ast.type;
 
 import ast.Expression;
 import ast.Type;
+import ast.expression.IntLiteral;
 import semantic.Visitor;
 
 public class ArrayType extends AbstractType {
-    public Expression size;
+    public IntLiteral size;
     public Type elementType;
 
-    public ArrayType(int line, int column, Expression size, Type elementType) {
+    public ArrayType(int line, int column, IntLiteral size, Type elementType) {
         super(line,column);
         this.size = size;
         this.elementType = elementType;
@@ -48,14 +49,14 @@ public class ArrayType extends AbstractType {
 
     @Override
     public int numberOfBytes() {
-        return elementType.numberOfBytes() * size.value;
+        return elementType.numberOfBytes() * size.getValue();
     }
 
     public Expression getSize() {
         return size;
     }
 
-    public void setSize(Expression size) {
+    public void setSize(IntLiteral size) {
         this.size = size;
     }
 
