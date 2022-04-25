@@ -1,6 +1,5 @@
 package ast.type;
 
-import ast.AbstractASTNode;
 import ast.Type;
 import errorhandler.ErrorHandler;
 import semantic.Visitor;
@@ -35,5 +34,67 @@ public class ErrorType extends AbstractType {
     @Override
     public int numberOfBytes() {
         return 0;
+    }
+
+    @Override
+    public Type arithmetic(Type type2) {
+        return this;
+    }
+
+    @Override
+    public Type comparedTo(Type type2) {
+        return this;
+    }
+
+    @Override
+    public Type dot(String name) {
+        return this;
+    }
+
+    @Override
+    public Type parentheses(List<Type> argTypes) {
+        return this;
+    }
+
+    @Override
+    public Type squareBrackets(Type type2) {
+        return this;
+    }
+
+    @Override
+    public Type logical(Type type2) {
+        return this;
+    }
+
+    @Override
+    public Type unaryMinus() {
+        return this;
+    }
+
+    @Override
+    public Type unaryNot() {
+        return this;
+    }
+
+    @Override
+    public Type castTo(Type type2) {
+        return this;
+    }
+
+    @Override
+    public void returnedAs(Type type2) {
+    }
+
+    @Override
+    public void asBoolean() {
+    }
+
+    @Override
+    public void written() {
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return true;
     }
 }

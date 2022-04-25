@@ -21,8 +21,8 @@ public class DoubleType extends AbstractType {
 
     @Override
     public Type arithmetic(Type type2) {
-        if (type2 instanceof DoubleType) return new DoubleType(0,0);
-        if (type2 instanceof IntType) return new DoubleType(0,0);
+        if (type2 instanceof DoubleType) return new DoubleType(this.getLine(),this.getColumn());
+        if (type2 instanceof IntType) return new DoubleType(this.getLine(),this.getColumn());
 
         return super.arithmetic(type2);
     }

@@ -59,7 +59,7 @@ public class StructType extends AbstractType {
             }
         }
 
-        return new ErrorType(0,0, String.format("Field %s does not exist.", name));
+        return new ErrorType(this.getLine(),this.getColumn(), String.format("Field %s does not exist.", name));
     }
 
     @Override

@@ -10,9 +10,9 @@ import ast.type.*;
 public interface Visitor<TP, TR> {
     TR visit(Program program, TP param);
 
-    TR visit(Assignment program, TP param);
+    TR visit(Assignment assignment, TP param);
 
-    TR visit(Variable program, TP param);
+    TR visit(Variable variable, TP param);
 
     TR visit(Arithmetic arithmetic, TP param);
 
