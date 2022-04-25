@@ -30,4 +30,10 @@ public interface Type extends ASTNode {
     public void written();
 
     public int numberOfBytes();
+
+    public char suffix();
+
+    String convertTo(Type type);
+
+    String promoteTo(Type type);
 }

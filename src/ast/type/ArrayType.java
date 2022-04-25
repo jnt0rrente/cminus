@@ -52,6 +52,7 @@ public class ArrayType extends AbstractType {
         return elementType.numberOfBytes() * size.getValue();
     }
 
+
     public Expression getSize() {
         return size;
     }

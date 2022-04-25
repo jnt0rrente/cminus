@@ -1,6 +1,7 @@
 package ast.type;
 
 import ast.Type;
+import ast.expression.IntLiteral;
 import semantic.Visitor;
 
 
@@ -86,5 +87,28 @@ public class IntType extends AbstractType {
     @Override
     public int numberOfBytes() {
         return 2;
+    }
+
+    @Override
+    public char suffix() {
+        return 'i';
+    }
+
+    @Override
+    public String convertTo(Type type) {
+        if (type instanceof CharType) {
+            return "i2b";
+        } else if (type instanceof DoubleType) {
+            return "i2f";
+        }
+        return "";
+    }
+
+    @Override
+    public String promoteTo(Type type) {
+        if (type instanceof DoubleType) {
+            return "i2f";
+        }
+        else return "";
     }
 }

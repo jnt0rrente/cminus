@@ -85,4 +85,19 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     public boolean equals(Object obj) {
         return this.getClass().equals(obj.getClass());
     }
+
+    @Override
+    public char suffix() {
+        return 'x';
+    }
+
+    @Override
+    public String convertTo(Type type) {
+        return "";
+    }
+
+    @Override
+    public String promoteTo(Type type) {
+        return "";
+    }
 }

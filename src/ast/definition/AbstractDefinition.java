@@ -15,6 +15,7 @@ public abstract class AbstractDefinition extends AbstractASTNode implements Defi
         this.type = type;
     }
 
+    @Override
     public int getScope() {
         return scope;
     }

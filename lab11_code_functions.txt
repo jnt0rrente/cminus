@@ -15,7 +15,7 @@ address[[Variable: expression -> ID]] =
 	else {
 		<push bp>
 		<pushi > expression.definition.offset
-		<addi >
+		<addi>
 	}
 
 value[[Variable: expression -> ID]] =
@@ -44,8 +44,8 @@ value[[Arithmetic: expression1 -> expression2 ('+'|'-'|'*'|'/') expression3]] =
 	
 value[[UnaryMinus: expression1 -> expression2]] = 
 	value[[expression2]]
-	pushi -1
-	muli
+	<pushi -1>
+	<muli>
 	
 value[[Comparison: expression1 -> expression2 (">"|"<"|">="|"<="|"=="|"!=") expression3]] =
 	value[[expression2]]

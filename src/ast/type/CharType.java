@@ -1,6 +1,5 @@
 package ast.type;
 
-import ast.AbstractASTNode;
 import ast.Type;
 import semantic.Visitor;
 
@@ -28,6 +27,11 @@ public class CharType extends AbstractType {
     }
 
     @Override
+    public Type arithmetic(Type type2) {
+        return new IntType(getLine(), getColumn());
+    }
+
+    @Override
     public String getTypeName() {
         return "CharType";
     }
@@ -47,5 +51,28 @@ public class CharType extends AbstractType {
     @Override
     public int numberOfBytes() {
         return 1;
+    }
+
+    @Override
+    public char suffix() {
+        return 'b';
+    }
+
+    @Override
+    public String convertTo(Type type) {
+        if (type instanceof IntType) {
+            return "b2i";
+        } if (type instanceof DoubleType) {
+            return "b2i,i2f";
+        }
+        return "";
+    }
+
+    @Override
+    public String promoteTo(Type type) {
+        if (type instanceof DoubleType) {
+            return "b2i";
+        }
+        else return "";
     }
 }
