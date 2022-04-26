@@ -8,6 +8,160 @@ import ast.statement.*;
 import ast.type.*;
 import semantic.Visitor;
 
+
+/**
+ *
+ * //Expressions
+ *
+ * value[[IntLiteral: expression -> INT_CONSTANT]] =
+ * 	<pushi > INT_CONSTANT
+ *
+ * value[[RealLiteral: expression -> REAL_CONSTANT]] =
+ * 	<pushf > expression.value
+ *
+ * value[[CharLiteral: expression -> CHAR_CONSTANT]] =
+ * 	<pushb > (int) expression.value
+ *
+ * address[[Variable: expression -> ID]] =
+ * 	if (expression.definition.scope == 0) { //if global
+ * 		<pusha > expression.definition.offset
+ * 	else {
+ * 		<push bp>
+ * 		<pushi > expression.definition.offset
+ * 		<addi>
+ *        }
+ *
+ * value[[Variable: expression -> ID]] =
+ * 	address[[expression]]
+ * 	<load> expression.type.suffix()
+ *
+ * value[[Arithmetic: expression1 -> expression2 ('+'|'-'|'*'|'/') expression3]] =
+ * 	value[[expression2]]
+ * 	expression2.type.convertTo(expression1.type)
+ * 	value[[expression3]]
+ * 	expression3.type.convertTo(expression1.type)
+ * 	switch (expression1.operator) {
+ * 		case '+':
+ * 			<add> expression1.type.suffix()
+ * 			break
+ * 		case '-':
+ * 			<sub> expression1.type.suffix()
+ * 			break
+ * 		case '*':
+ * 			<mul> expression1.type.suffix()
+ * 			break
+ * 		case '/':
+ * 			<div> expression1.type.suffix()
+ * 			break
+ *    }
+ *
+ * value[[UnaryMinus: expression1 -> expression2]] =
+ * 	value[[expression2]]
+ * 	<pushi -1>
+ * 	<muli>
+ *
+ * value[[Comparison: expression1 -> expression2 (">"|"<"|">="|"<="|"=="|"!=") expression3]] =
+ * 	value[[expression2]]
+ * 	expression2.type.promoteTo(expression1.type) //does nothing when real -> int and prints b2i when byte -> int
+ * 	value[[expression3]]
+ * 	expression3.type.promoteTo(expression1.type)
+ *
+ * 	switch (expression1.operator) {
+ * 		case ">":
+ * 			<gt> cg.minIntSuffix(expression2.type)
+ * 			break
+ * 		case "<":
+ * 			<lt> cg.minIntSuffix(expression2.type)
+ * 			break
+ * 		case ">=":
+ * 			<ge> cg.minIntSuffix(expression2.type)
+ * 			break
+ * 		case "<=":
+ * 			<le> cg.minIntSuffix(expression2.type)
+ * 			break
+ * 		case "==":
+ * 			<eq> cg.minIntSuffix(expression2.type)
+ * 			break
+ * 		case "!=":
+ * 			<ne> cg.minIntSuffix(expression2.type)
+ * 			break
+ *    }
+ *
+ * value[[UnaryNot: expression1 -> expression2]] =
+ * 	value[[expression2]]
+ * 	<not>
+ *
+ * value[[Logical: expression1 -> expression2 ("&&"|"||") expression3]] =
+ * 	value[[expression2]]
+ * 	value[[expression3]]
+ *
+ * 	switch (expression1.operator) {
+ * 		case "&&":
+ * 			<and>
+ * 			break
+ * 		case "||":
+ * 			<or>
+ * 			break
+ *    }
+ *
+ * value[[Cast: expression1 -> type expression2]] =
+ * 	value[[expression2]]
+ * 	expression2.type.convertTo(expression1.type)
+ *
+ *
+ * //Statements
+ * execute[[Assignment: statement -> expression1 expression2]] =
+ * 	address[[expression1]]
+ * 	value[[expression2]]
+ * 	<store > + expression1.type.suffix()
+ *
+ * execute[[Write: statement -> expression]] =
+ * 	value[[expression]]
+ * 	<out > expression.type.suffix()
+ *
+ * execute[[Read: statement -> expression]] =
+ * 	address[[expression]]
+ * 	<in > expression.type.suffix()
+ *
+ *
+ * //Definitions
+ * execute[[FunctionDefinition: definition -> type ID definition* statement*]] =
+ * 	ID <:>
+ * 	cg.comment("Parameters")
+ * 	for (int i = 0; i < type.parameters.size(); i++) {
+ * 		execute[[type.parameters.get(i)]]
+ *    }
+ * 	cg.comment("Local variables")
+ * 	for (int i = 0; i < definition*.size(); i++) {
+ * 		execute[[definition*.get(i)]]
+ *    }
+ * 	<enter > definition*.get(definition*.size()-1).offset
+ * 	statement*.forEach(statement -> execute[[statement]])
+ *
+ * 	int variables = definition.localVariables.stream().mapToInt(var -> var.type.numberOfBytes).sum()
+ * 	int parameters = type.parameters.stream().mapToInt(parameter -> parameter.type.numberOfBytes).sum()
+ * 	if (type.returnType instanceof VoidType) {
+ * 		<ret > 0, variables, parameters
+ *    }
+ *
+ * execute[[VariableDefinition: definition -> type ID]] =
+ * 	cg.comment(type.getSimpleName() + " " + ID + " (offset " + definition.offset+")")
+ *
+ * execute[[Program: program -> definition*]] =
+ * 	<call main>
+ * 	<halt>
+ * 	program.definitions.forEach(def -> execute[[def]]);
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 public abstract class AbstractCGVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override

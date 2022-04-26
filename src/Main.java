@@ -54,6 +54,7 @@ public class Main {
 
         AddressCGVisitor addressCGVisitor = new AddressCGVisitor();
         ValueCGVisitor valueCGVisitor = new ValueCGVisitor(addressCGVisitor);
+        addressCGVisitor.setValueCGVisitor(valueCGVisitor);
         ExecuteCGVisitor executeCGVisitor = new ExecuteCGVisitor(addressCGVisitor, valueCGVisitor);
 
         ast.accept(executeCGVisitor, null);

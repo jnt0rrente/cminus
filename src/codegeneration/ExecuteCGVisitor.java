@@ -6,9 +6,7 @@ import ast.Program;
 import ast.Statement;
 import ast.definition.FunctionDefinition;
 import ast.definition.VariableDefinition;
-import ast.statement.Assignment;
-import ast.statement.Read;
-import ast.statement.Write;
+import ast.statement.*;
 import ast.type.FunctionType;
 import ast.type.VoidType;
 
@@ -16,6 +14,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ *
+ * execute[[While: statement -> expression statement*]] =
+ *     String conditionLabel = cg.nextLabel(),
+ *     exitLabel = cg.nextLabel();
+ *     conditionLabel <:>
+ *     value[[expression]]
+ *     <jz > exitLabel
+ *     statement*.forEach(st -> execute[[st]]);
+ *     <jmp > conditionLabel
+ *     exitLabel <:>
+ *
+ * execute[[IfElse: statement -> expression statement1* statement2*]] =
+ *     String exitLabel = cg.nextLabel();
+ *     String elseLabel = cg.nextLabel();
+ *     value[[expression]]
+ *     <jz > elseLabel
+ *     statement1*.forEach(st -> execute[[st]]);
+ *     <jmp > exitLabel
+ *     elseLabel <:>
+ *     statement2*.forEach(st -> execute[[st]]);
+ *     exitLabel <:>
+ *
+ */
 public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     AddressCGVisitor addressCGVisitor;
     ValueCGVisitor valueCGVisitor;
@@ -24,6 +46,42 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     public ExecuteCGVisitor(AddressCGVisitor addressCGVisitor, ValueCGVisitor valueCGVisitor) {
         this.addressCGVisitor = addressCGVisitor;
         this.valueCGVisitor = valueCGVisitor;
+    }
+
+    @Override
+    public Void visit(WhileLoop whileLoop, Void param) {
+        String conditionLabel = cg.nextLabel();
+        String exitLabel = cg.nextLabel();
+
+        cg.writeLabel(conditionLabel);
+        whileLoop.getCondition().accept(valueCGVisitor, param);
+        cg.writeTabbedInstruction("jz " + exitLabel);
+
+        whileLoop.getBody().forEach(statement -> statement.accept(this, param));
+        cg.writeTabbedInstruction("jmp " + conditionLabel);
+
+        cg.writeLabel(exitLabel);
+        return null;
+    }
+
+    @Override
+    public Void visit(IfElse ifElse, Void param) {
+        String exitLabel = cg.nextLabel();
+        String elseLabel = cg.nextLabel();
+
+        ifElse.getCondition().accept(valueCGVisitor, param);
+
+        cg.writeTabbedInstruction("jz " + elseLabel);
+
+        ifElse.getBody().forEach(statement -> statement.accept(this, param));
+
+        cg.writeTabbedInstruction("jmp " + exitLabel);
+
+        cg.writeLabel(elseLabel);
+        ifElse.getBodyElse().forEach(statement -> statement.accept(this, param));
+
+        cg.writeLabel(exitLabel);
+        return null;
     }
 
     @Override

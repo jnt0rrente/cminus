@@ -11,6 +11,7 @@ public class CodeGenerator {
     private static CodeGenerator instance;
     private BufferedWriter bufferedWriter;
     private String programName;
+    int labelNumberCounter = 0;
 
     private CodeGenerator() {
     }
@@ -29,30 +30,16 @@ public class CodeGenerator {
 
     public void writeTabbedInstruction(String instruction) {
         if (instruction.length() <= 0) return;
-        System.out.println(instruction);
-        try {
-            bufferedWriter.write("\t" + instruction + "\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        rawWrite("\t" + instruction + "\n");
     }
 
     public void writeInstruction(String instruction) {
         if (instruction.length() <= 0) return;
-        System.out.println(instruction);
-        try {
-            bufferedWriter.write(instruction + "\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        rawWrite(instruction + "\n");
     }
 
     public void comment(String comment) {
-        try {
-            bufferedWriter.write("\t' * " + comment + "\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        rawWrite("\t' * " + comment + "\n");
     }
 
     public char minIntSuffix(Type type) {
@@ -61,30 +48,34 @@ public class CodeGenerator {
     }
 
     public void writeProgramName() {
-        try {
-            bufferedWriter.write("#source \"" + programName + "\"\n\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        rawWrite("#source \"" + programName + "\"\n\n");
     }
 
     public void writeLine(int line) {
-        try {
-            bufferedWriter.write("\n#line " + line + "\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        rawWrite("\n#line " + line + "\n");
     }
 
     public void writeTabbedConvertInstruction(String instruction) {
         if (instruction.length() <= 0) return;
         String[] steps = instruction.split(",");
+        for (String s : steps) {
+            rawWrite("\t" + s + "\n");
+        }
+    }
+
+    public String nextLabel() {
+        labelNumberCounter++;
+        return "label"+labelNumberCounter;
+    }
+
+    public void writeLabel(String label) {
+        rawWrite(label + ":\n");
+    }
+
+    private void rawWrite(String toWrite) {
         try {
-            for (String s:
-                 steps) {
-                bufferedWriter.write("\t" + s + "\n");
-                System.out.println(s);
-            }
+            System.out.print(toWrite);
+            bufferedWriter.write(toWrite);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

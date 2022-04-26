@@ -71,5 +71,12 @@ public class StructType extends AbstractType {
     public int numberOfBytes() {
         return records.stream().mapToInt(recordField -> recordField.getType().numberOfBytes()).sum();
     }
+
+    public RecordField getRecord(String name) {
+        for (RecordField r : records) {
+            if (r.getName().equals(name)) return r;
+        }
+        return null;
+    }
 }
 

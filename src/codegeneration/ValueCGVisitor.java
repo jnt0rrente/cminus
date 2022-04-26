@@ -2,12 +2,36 @@ package codegeneration;
 
 import ast.expression.*;
 
+/**
+ * value[[Indexing: expression1 -> expression2 expression3]] =
+ *     address[[expression1]]
+ *     <load > expression1.type.suffix()
+ *
+ * value[[FieldAccess: expression1 -> expression2 ID]] =
+ *      address[[expression1]]
+ *      <load > expression1.type.suffix()
+ *
+ */
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     AddressCGVisitor addressCGVisitor;
     CodeGenerator cg = CodeGenerator.getInstance();
 
     public ValueCGVisitor(AddressCGVisitor addressCGVisitor) {
         this.addressCGVisitor = addressCGVisitor;
+    }
+
+    @Override
+    public Void visit(FieldAccess fieldAccess, Void param) {
+        fieldAccess.accept(addressCGVisitor, param);
+        cg.writeTabbedInstruction("load" + fieldAccess.getType().suffix());
+        return null;
+    }
+
+    @Override
+    public Void visit(Indexing indexing, Void param) {
+        indexing.accept(addressCGVisitor, param);
+        cg.writeTabbedInstruction("load" + indexing.getType().suffix());
+        return null;
     }
 
     @Override
