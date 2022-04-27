@@ -1,0 +1,345 @@
+#source "output-ref.txt"	' * Array [10,DoubleType] v (offset 0)
+	' Calling the main function.
+call main
+halt
+
+#line 4
+main:
+	' Parameters:
+	' Local variables:
+	' * DoubleType value (offset -4)
+	' * IntType i (offset -6)
+	' * IntType j (offset -8)
+	' * Array [4,Array [5,IntType]] w (offset -48)
+	' * record(Int builtin day, Int builtin month, Int builtin year, ) date (offset -54)
+	enter 54
+
+#line 13
+	' Read
+	pushi bp
+	pushi -54
+	addi
+	' Accessing RecordField day
+	pushi 0
+	addi
+	ini
+	storei
+
+#line 14
+	pushi bp
+	pushi -54
+	addi
+	' Accessing RecordField year
+	pushi 4
+	addi
+	pushb 97
+	b2i
+
+	storei
+
+#line 15
+	pushi bp
+	pushi -54
+	addi
+	' Accessing RecordField month
+	pushi 2
+	addi
+	pushi bp
+	pushi -54
+	addi
+	' Accessing RecordField day
+	pushi 0
+	addi
+	loadi
+	pushi bp
+	pushi -54
+	addi
+	' Accessing RecordField year
+	pushi 4
+	addi
+	loadi
+	muli
+	pushi 12
+	modi
+	pushi 1
+	addi
+	storei
+
+#line 16
+	' Write
+	pushi bp
+	pushi -54
+	addi
+	' Accessing RecordField day
+	pushi 0
+	addi
+	loadi
+	outi
+
+#line 16
+	' Write
+	pushb 10
+	outb
+
+#line 16
+	' Write
+	pushi bp
+	pushi -54
+	addi
+	' Accessing RecordField month
+	pushi 2
+	addi
+	loadi
+	outi
+
+#line 16
+	' Write
+	pushb 10
+	outb
+
+#line 16
+	' Write
+	pushi bp
+	pushi -54
+	addi
+	' Accessing RecordField year
+	pushi 4
+	addi
+	loadi
+	i2f
+
+	outf
+
+#line 16
+	' Write
+	pushb 10
+	outb
+
+#line 18
+	' Read
+	pushi bp
+	pushi -4
+	addi
+	inf
+	storef
+
+#line 20
+	pushi bp
+	pushi -6
+	addi
+	pushi 0
+	storei
+
+#line 21
+	' WhileLoop
+label1:
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	pushi 10
+	lti
+	jz label2
+	pushi 0
+	pushi 4
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	muli
+	addi
+	pushi bp
+	pushi -4
+	addi
+	loadf
+	storef
+	' Write
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	outi
+	' Write
+	pushb 58
+	outb
+	' Write
+	pushi 0
+	pushi 4
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	muli
+	addi
+	loadf
+	outf
+	' Write
+	pushb 32
+	outb
+	' If:
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	pushi 2
+	modi
+	jz label4
+	' Then:
+	' Write
+	pushb 111
+	outb
+	' Write
+	pushb 100
+	outb
+	' Write
+	pushb 100
+	outb
+	' Write
+	pushb 10
+	outb
+	jmp label3
+	' Else:
+label4:
+	' Write
+	pushb 101
+	outb
+	' Write
+	pushb 118
+	outb
+	' Write
+	pushb 101
+	outb
+	' Write
+	pushb 110
+	outb
+	' Write
+	pushb 10
+	outb
+label3:
+	pushi bp
+	pushi -6
+	addi
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label1
+label2:
+
+#line 30
+	' Write
+	pushb 10
+	outb
+
+#line 32
+	pushi bp
+	pushi -6
+	addi
+	pushi 0
+	storei
+
+#line 33
+	' WhileLoop
+label5:
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	pushi 4
+	lti
+	jz label6
+	pushi bp
+	pushi -8
+	addi
+	pushi 0
+	storei
+	' WhileLoop
+label7:
+	pushi bp
+	pushi -8
+	addi
+	loadi
+	pushi 5
+	lti
+	jz label8
+	pushi bp
+	pushi -48
+	addi
+	pushi 10
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi bp
+	pushi -8
+	addi
+	loadi
+	muli
+	addi
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	pushi bp
+	pushi -8
+	addi
+	loadi
+	addi
+	storei
+	' Write
+	pushi bp
+	pushi -48
+	addi
+	pushi 10
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi bp
+	pushi -8
+	addi
+	loadi
+	muli
+	addi
+	loadi
+	outi
+	' Write
+	pushb 32
+	outb
+	pushi bp
+	pushi -8
+	addi
+	pushi bp
+	pushi -8
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label7
+label8:
+	' Write
+	pushb 10
+	outb
+	pushi bp
+	pushi -6
+	addi
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label5
+label6:
+	ret 0, 54, 0

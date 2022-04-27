@@ -1,16 +1,16 @@
 package codegeneration;
 
 import ast.expression.*;
+import ast.type.CharType;
 
 /**
  * value[[Indexing: expression1 -> expression2 expression3]] =
- *     address[[expression1]]
- *     <load > expression1.type.suffix()
- *
+ * address[[expression1]]
+ * <load > expression1.type.suffix()
+ * <p>
  * value[[FieldAccess: expression1 -> expression2 ID]] =
- *      address[[expression1]]
- *      <load > expression1.type.suffix()
- *
+ * address[[expression1]]
+ * <load > expression1.type.suffix()
  */
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     AddressCGVisitor addressCGVisitor;
@@ -23,21 +23,21 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(FieldAccess fieldAccess, Void param) {
         fieldAccess.accept(addressCGVisitor, param);
-        cg.writeTabbedInstruction("load" + fieldAccess.getType().suffix());
+        cg.load(fieldAccess.getType().suffix());
         return null;
     }
 
     @Override
     public Void visit(Indexing indexing, Void param) {
         indexing.accept(addressCGVisitor, param);
-        cg.writeTabbedInstruction("load" + indexing.getType().suffix());
+        cg.load(indexing.getType().suffix());
         return null;
     }
 
     @Override
     public Void visit(Cast cast, Void param) {
         cast.getExpression().accept(this, param);
-        cg.writeTabbedConvertInstruction(cast.getExpression().getType().convertTo(cast.getType()));
+        cg.convert(cast.getExpression().getType().convertTo(cast.getType()));
         return null;
     }
 
@@ -46,26 +46,26 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
         comparison.getOperand1().accept(this, param);
         comparison.getOperand1().getType().promoteTo(comparison.getType()); //does nothing when real -> int and prints b2i when byte -> int
         comparison.getOperand2().accept(this, param);
-        cg.writeTabbedInstruction(comparison.getOperand2().getType().promoteTo(comparison.getType()));
+        cg.convert(comparison.getOperand2().getType().promoteTo(comparison.getType()));
 
         switch (comparison.getOperator()) {
             case ">":
-                cg.writeTabbedInstruction("gt" + cg.minIntSuffix(comparison.getOperand1().getType()));
+                cg.gt(cg.minIntSuffix(comparison.getOperand1().getType()));
                 break;
             case "<":
-                cg.writeTabbedInstruction("lt" + cg.minIntSuffix(comparison.getOperand1().getType()));
+                cg.lt(cg.minIntSuffix(comparison.getOperand1().getType()));
                 break;
             case ">=":
-                cg.writeTabbedInstruction("ge" + cg.minIntSuffix(comparison.getOperand1().getType()));
+                cg.ge(cg.minIntSuffix(comparison.getOperand1().getType()));
                 break;
             case "<=":
-                cg.writeTabbedInstruction("le" + cg.minIntSuffix(comparison.getOperand1().getType()));
+                cg.le(cg.minIntSuffix(comparison.getOperand1().getType()));
                 break;
             case "==":
-                cg.writeTabbedInstruction("eq" + cg.minIntSuffix(comparison.getOperand1().getType()));
+                cg.eq(cg.minIntSuffix(comparison.getOperand1().getType()));
                 break;
             case "!=":
-                cg.writeTabbedInstruction("ne" + cg.minIntSuffix(comparison.getOperand1().getType()));
+                cg.ne(cg.minIntSuffix(comparison.getOperand1().getType()));
                 break;
         }
 
@@ -79,10 +79,10 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
         switch (logical.getOperator()) {
             case "&&":
-                cg.writeTabbedInstruction("and");
+                cg.and();
                 break;
             case "||":
-                cg.writeTabbedInstruction("or");
+                cg.or();
                 break;
         }
 
@@ -92,32 +92,32 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(Variable variable, Void param) {
         addressCGVisitor.visit(variable, param);
-        cg.writeTabbedInstruction("load" + variable.getType().suffix());
+        cg.load(variable.getType().suffix());
         return null;
     }
 
     @Override
     public Void visit(Arithmetic arithmetic, Void param) {
         arithmetic.getOperand1().accept(this, param);
-        cg.writeTabbedInstruction(arithmetic.getOperand1().getType().convertTo(arithmetic.getType()));
+        cg.convert(arithmetic.getOperand1().getType().convertTo(arithmetic.getType()));
         arithmetic.getOperand2().accept(this, param);
-        cg.writeTabbedInstruction(arithmetic.getOperand2().getType().convertTo(arithmetic.getType()));
+        cg.convert(arithmetic.getOperand2().getType().convertTo(arithmetic.getType()));
 
         switch (arithmetic.getOperator()) {
             case '+':
-                cg.writeTabbedInstruction("add" + arithmetic.getType().suffix());
+                cg.add(arithmetic.getType().suffix());
                 break;
             case '-':
-                cg.writeTabbedInstruction("sub" + arithmetic.getType().suffix());
+                cg.sub(arithmetic.getType().suffix());
                 break;
             case '*':
-                cg.writeTabbedInstruction("mul" + arithmetic.getType().suffix());
+                cg.mul(arithmetic.getType().suffix());
                 break;
             case '/':
-                cg.writeTabbedInstruction("div" + arithmetic.getType().suffix());
+                cg.div(arithmetic.getType().suffix());
                 break;
             case '%':
-                cg.writeTabbedInstruction("modi");
+                cg.mod('i');
                 break;
         }
         return null;
@@ -125,34 +125,34 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(CharLiteral charLiteral, Void param) {
-        cg.writeTabbedInstruction("pushb " + (int) charLiteral.getValue());
+        cg.push(charLiteral.getType().suffix(), "" + (int) charLiteral.getValue());
         return null;
     }
 
     @Override
     public Void visit(IntLiteral intLiteral, Void param) {
-        cg.writeTabbedInstruction("pushi " + intLiteral.getValue());
+        cg.push(intLiteral.getType().suffix(), "" + intLiteral.getValue());
         return null;
     }
 
     @Override
     public Void visit(RealLiteral realLiteral, Void param) {
-        cg.writeTabbedInstruction("pushf " + realLiteral.getValue());
+        cg.push(realLiteral.getType().suffix(), "" + realLiteral.getValue());
         return null;
     }
 
     @Override
     public Void visit(UnaryMinus unaryMinus, Void param) {
         unaryMinus.getTarget().accept(this, param);
-        cg.writeTabbedInstruction("pushi -1");
-        cg.writeTabbedInstruction("muli");
+        cg.push(unaryMinus.getType().suffix(), "-1");
+        cg.mul(unaryMinus.getType().suffix());
         return null;
     }
 
     @Override
     public Void visit(UnaryNot unaryNot, Void param) {
         unaryNot.getTarget().accept(this, param);
-        cg.writeTabbedInstruction("not");
+        cg.not();
         return null;
     }
 

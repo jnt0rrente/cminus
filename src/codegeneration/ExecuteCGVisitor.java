@@ -50,18 +50,18 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(WhileLoop whileLoop, Void param) {
-        cg.comment("While Loop");
+        cg.shortComment("WhileLoop");
         String conditionLabel = cg.nextLabel();
         String exitLabel = cg.nextLabel();
 
-        cg.writeLabel(conditionLabel);
+        cg.label(conditionLabel);
         whileLoop.getCondition().accept(valueCGVisitor, param);
-        cg.writeTabbedInstruction("jz " + exitLabel);
+        cg.jz(exitLabel);
 
         whileLoop.getBody().forEach(statement -> statement.accept(this, param));
-        cg.writeTabbedInstruction("jmp " + conditionLabel);
+        cg.jmp(conditionLabel);
 
-        cg.writeLabel(exitLabel);
+        cg.label(exitLabel);
         return null;
     }
 
@@ -69,22 +69,22 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(IfElse ifElse, Void param) {
         String exitLabel = cg.nextLabel();
         String elseLabel = cg.nextLabel();
-        cg.comment("If/Else");
+        cg.shortComment("If:");
 
         ifElse.getCondition().accept(valueCGVisitor, param);
 
-        cg.writeTabbedInstruction("jz " + elseLabel);
+        cg.jz(elseLabel);
 
-        cg.comment("If Body");
+        cg.shortComment("Then:");
         ifElse.getBody().forEach(statement -> statement.accept(this, param));
 
-        cg.writeTabbedInstruction("jmp " + exitLabel);
+        cg.jmp(exitLabel);
 
-        cg.comment("Else Body");
-        cg.writeLabel(elseLabel);
+        cg.shortComment("Else:");
+        cg.label(elseLabel);
         ifElse.getBodyElse().forEach(statement -> statement.accept(this, param));
 
-        cg.writeLabel(exitLabel);
+        cg.label(exitLabel);
         return null;
     }
 
@@ -100,9 +100,9 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
                 functionDefs.add(def);
             }
         }
-        cg.comment("Calling the main function.");
-        cg.writeInstruction("call main");
-        cg.writeInstruction("halt");
+        cg.shortComment("Calling the main function.");
+        cg.call("main", false);
+        cg.halt();
         for (Definition def : functionDefs) {
             def.accept(this, param);
         }
@@ -113,24 +113,24 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(Assignment assignment, Void param) {
         assignment.getLHS().accept(addressCGVisitor, param);
         assignment.getRHS().accept(valueCGVisitor, param);
-        cg.writeTabbedInstruction("store" + assignment.getLHS().getType().suffix());
+        cg.store(assignment.getLHS().getType().suffix());
         return null;
     }
 
     @Override
     public Void visit(FunctionDefinition functionDefinition, Void param) {
-        cg.writeLine(functionDefinition.getLine());
-        cg.writeInstruction(functionDefinition.getName() + ":");
-        cg.comment("Parameters:");
+        cg.line(functionDefinition.getLine());
+        cg.label(functionDefinition.getName());
+        cg.shortComment("Parameters:");
         ((FunctionType) functionDefinition.getType()).getParameterVariableDefinitions().forEach(paramDef -> paramDef.accept(this, param));
-        cg.comment("Local variables:");
+        cg.shortComment("Local variables:");
         functionDefinition.getBodyVariableDefinitions().forEach(paramDef -> paramDef.accept(this, param));
-        cg.writeTabbedInstruction("enter " + functionDefinition
+        cg.enter(functionDefinition
                 .getBodyVariableDefinitions()
                 .get(functionDefinition.getBodyVariableDefinitions().size() - 1)
                 .getOffset() * -1); //offset of last variable definition
         for (Statement statement : functionDefinition.getBodyStatements()) {
-            cg.writeLine(statement.getLine());
+            cg.line(statement.getLine());
             statement.accept(this, param);
         }
 
@@ -140,31 +140,31 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
             int parametersSize = ((FunctionType) functionDefinition.getType()).getParameterVariableDefinitions()
                     .stream().mapToInt(paramDef -> paramDef.getType().numberOfBytes()).sum();
-            cg.writeTabbedInstruction(String.format("ret %d, %d, %d", 0, variablesSize, parametersSize));
+            cg.ret(0, variablesSize, parametersSize);
         }
         return null;
     }
 
     @Override
     public Void visit(VariableDefinition variableDefinition, Void param) {
-        cg.comment(variableDefinition.getType().getTypeName() + " " + variableDefinition.getName() + " (offset " + variableDefinition.getOffset() + ")");
+        cg.longComment(variableDefinition.getType().getTypeName() + " " + variableDefinition.getName() + " (offset " + variableDefinition.getOffset() + ")");
         return null;
     }
 
     @Override
     public Void visit(Read read, Void param) {
-        cg.comment("Read");
+        cg.shortComment("Read");
         read.getReadVal().accept(addressCGVisitor, param);
-        cg.writeTabbedInstruction("in" + read.getReadVal().getType().suffix());
-        cg.writeTabbedInstruction("store" + read.getReadVal().getType().suffix());
+        cg.in(read.getReadVal().getType().suffix());
+        cg.store(read.getReadVal().getType().suffix());
         return null;
     }
 
     @Override
     public Void visit(Write write, Void param) {
-        cg.comment("Write");
+        cg.shortComment("Write");
         write.getWriteVal().accept(valueCGVisitor, param);
-        cg.writeTabbedInstruction("out" + write.getWriteVal().getType().suffix());
+        cg.out(write.getWriteVal().getType().suffix());
         return null;
     }
 }
