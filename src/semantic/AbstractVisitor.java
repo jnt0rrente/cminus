@@ -120,6 +120,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
 
     @Override
     public TR visit(VariableDefinition variableDefinition, TP param) {
+        variableDefinition.getType().accept(this, param);
         return null;
     }
 

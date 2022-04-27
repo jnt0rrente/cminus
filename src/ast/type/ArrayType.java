@@ -44,7 +44,7 @@ public class ArrayType extends AbstractType {
 
     @Override
     public String getTypeName() {
-        return "ArrayType";
+        return String.format("Array [%d,%s]", size.getValue(), elementType.getTypeName());
     }
 
     @Override

@@ -1,17 +1,19 @@
 #source "output.txt"
 
-	' * ArrayType v (offset 0)
+	' * Array [10,DoubleType] v (offset 0)
 	' * Calling the main function.
 call main
 halt
+
+#line 4
 main:
 	' * Parameters:
 	' * Local variables:
 	' * DoubleType value (offset -4)
 	' * IntType i (offset -6)
 	' * IntType j (offset -8)
-	' * ArrayType w (offset -48)
-	' * StructType date (offset -54)
+	' * Array [4,Array [5,IntType]] w (offset -48)
+	' * record(Int builtin day, Int builtin month, Int builtin year, ) date (offset -54)
 	enter 54
 
 #line 13
@@ -19,6 +21,7 @@ main:
 	push bp
 	pushi -54
 	addi
+	' * Accessing RecordField day
 	pushi 0
 	addi
 	ini
@@ -28,7 +31,8 @@ main:
 	push bp
 	pushi -54
 	addi
-	pushi 0
+	' * Accessing RecordField year
+	pushi 4
 	addi
 	pushb 97
 	b2i
@@ -38,18 +42,21 @@ main:
 	push bp
 	pushi -54
 	addi
-	pushi 0
+	' * Accessing RecordField month
+	pushi 2
 	addi
 	push bp
 	pushi -54
 	addi
+	' * Accessing RecordField day
 	pushi 0
 	addi
 	loadi
 	push bp
 	pushi -54
 	addi
-	pushi 0
+	' * Accessing RecordField year
+	pushi 4
 	addi
 	loadi
 	muli
@@ -64,6 +71,7 @@ main:
 	push bp
 	pushi -54
 	addi
+	' * Accessing RecordField day
 	pushi 0
 	addi
 	loadi
@@ -79,7 +87,8 @@ main:
 	push bp
 	pushi -54
 	addi
-	pushi 0
+	' * Accessing RecordField month
+	pushi 2
 	addi
 	loadi
 	outi
@@ -94,7 +103,8 @@ main:
 	push bp
 	pushi -54
 	addi
-	pushi 0
+	' * Accessing RecordField year
+	pushi 4
 	addi
 	loadi
 	i2f
@@ -121,6 +131,7 @@ main:
 	storei
 
 #line 21
+	' * While Loop
 label1:
 	push bp
 	pushi -6
@@ -165,6 +176,7 @@ label1:
 	' * Write
 	pushb 32
 	outb
+	' * If/Else
 	push bp
 	pushi -6
 	addi
@@ -172,6 +184,7 @@ label1:
 	pushi 2
 	modi
 	jz label4
+	' * If Body
 	' * Write
 	pushb 111
 	outb
@@ -185,6 +198,7 @@ label1:
 	pushb 10
 	outb
 	jmp label3
+	' * Else Body
 label4:
 	' * Write
 	pushb 101
@@ -228,6 +242,7 @@ label2:
 	storei
 
 #line 33
+	' * While Loop
 label5:
 	push bp
 	pushi -6
@@ -241,6 +256,7 @@ label5:
 	addi
 	pushi 0
 	storei
+	' * While Loop
 label7:
 	push bp
 	pushi -8

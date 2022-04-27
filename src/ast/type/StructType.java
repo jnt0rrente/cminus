@@ -64,7 +64,16 @@ public class StructType extends AbstractType {
 
     @Override
     public String getTypeName() {
-        return "StructType";
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("record(");
+        for (RecordField recordField : records) {
+            sb.append(recordField.getType() + " " + recordField.getName());
+            sb.append(", ");
+        }
+        sb.append(")");
+
+        return sb.toString();
     }
 
     @Override
@@ -74,7 +83,9 @@ public class StructType extends AbstractType {
 
     public RecordField getRecord(String name) {
         for (RecordField r : records) {
-            if (r.getName().equals(name)) return r;
+            if (r.getName().equals(name)) {
+                return r;
+            }
         }
         return null;
     }

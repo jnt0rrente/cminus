@@ -40,6 +40,7 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void>{
     @Override
     public Void visit(FieldAccess fieldAccess, Void param) {
         fieldAccess.getExpression().accept(this, param);
+        cg.comment("Accessing RecordField " + fieldAccess.getName());
         cg.writeTabbedInstruction("pushi " + fieldAccess.getSpecificRecord().getOffset());
         cg.writeTabbedInstruction("addi");
         return null;

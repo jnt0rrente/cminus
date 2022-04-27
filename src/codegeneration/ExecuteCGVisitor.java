@@ -50,6 +50,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(WhileLoop whileLoop, Void param) {
+        cg.comment("While Loop");
         String conditionLabel = cg.nextLabel();
         String exitLabel = cg.nextLabel();
 
@@ -68,15 +69,18 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(IfElse ifElse, Void param) {
         String exitLabel = cg.nextLabel();
         String elseLabel = cg.nextLabel();
+        cg.comment("If/Else");
 
         ifElse.getCondition().accept(valueCGVisitor, param);
 
         cg.writeTabbedInstruction("jz " + elseLabel);
 
+        cg.comment("If Body");
         ifElse.getBody().forEach(statement -> statement.accept(this, param));
 
         cg.writeTabbedInstruction("jmp " + exitLabel);
 
+        cg.comment("Else Body");
         cg.writeLabel(elseLabel);
         ifElse.getBodyElse().forEach(statement -> statement.accept(this, param));
 
@@ -115,6 +119,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     @Override
     public Void visit(FunctionDefinition functionDefinition, Void param) {
+        cg.writeLine(functionDefinition.getLine());
         cg.writeInstruction(functionDefinition.getName() + ":");
         cg.comment("Parameters:");
         ((FunctionType) functionDefinition.getType()).getParameterVariableDefinitions().forEach(paramDef -> paramDef.accept(this, param));

@@ -103,7 +103,7 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
 
     @Override
     public Void visit(StructType structType, Void param) {
-        structType.getRecords().forEach(recordField -> recordField.accept(this,param));
+        //structType.getRecords().forEach(recordField -> recordField.accept(this,param));
 
         int fieldsBytesSum = 0;
         for (RecordField recordField : structType.getRecords()) {
