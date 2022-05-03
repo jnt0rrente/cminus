@@ -16,26 +16,80 @@ import java.util.List;
 
 /**
  *
+ * //Statements
+ * execute[[Assignment: statement -> expression1 expression2]] =
+ * 	    address[[expression1]]
+ * 	    value[[expression2]]
+ * 	    <store > + expression1.type.suffix()
+ *
+ * execute[[Write: statement -> expression]] =
+ *  	value[[expression]]
+ *  	<out > expression.type.suffix()
+ *
+ * execute[[Read: statement -> expression]] =
+ *  	address[[expression]]
+ *  	<in > expression.type.suffix()
+ *
  * execute[[While: statement -> expression statement*]] =
  *     String conditionLabel = cg.nextLabel(),
  *     exitLabel = cg.nextLabel();
  *     conditionLabel <:>
  *     value[[expression]]
  *     <jz > exitLabel
- *     statement*.forEach(st -> execute[[st]]);
+ *     statement*.forEach(st -> execute[[st]](int returnBytes, int localVarBytes, int paramBytes));
  *     <jmp > conditionLabel
  *     exitLabel <:>
  *
- * execute[[IfElse: statement -> expression statement1* statement2*]] =
+ * execute[[IfElse: statement -> expression statement1* statement2*]](int returnBytes, int localVarBytes, int paramBytes) =
  *     String exitLabel = cg.nextLabel();
  *     String elseLabel = cg.nextLabel();
  *     value[[expression]]
  *     <jz > elseLabel
- *     statement1*.forEach(st -> execute[[st]]);
+ *     statement1*.forEach(st -> execute[[st](int returnBytes, int localVarBytes, int paramBytes)]);
  *     <jmp > exitLabel
  *     elseLabel <:>
- *     statement2*.forEach(st -> execute[[st]]);
+ *     statement2*.forEach(st -> execute[[st](int returnBytes, int localVarBytes, int paramBytes)]);
  *     exitLabel <:>
+ *
+ * execute[[FunctionInvocation: statement -> expression expression*]] =
+ *     for (Expression e : expression*) {
+ *         value[[e]];
+ *     }
+ *     <call > expression.getIdentifier();
+ *     Type returnType = expression.getType().getReturnType();
+ *     <pop > returnType().suffix()
+ *
+ * execute[[Return: statement -> expression]](int returnBytes, int localVarBytes, int paramBytes) =
+ *     <ret > returnbytes <,> localVarBytes <,> paramBytes
+ *
+ * //Definitions
+ * execute[[FunctionDefinition: definition -> type ID definition* statement*]] =
+ * 	    ID <:>
+ * 	    cg.comment("Parameters")
+ * 	    for (int i = 0; i < type.parameters.size(); i++) {
+ * 		    execute[[type.parameters.get(i)]]
+ *      }
+ * 	    cg.comment("Local variables")
+ * 	    for (int i = 0; i < definition*.size(); i++) {
+ * 		    execute[[definition*.get(i)]]
+ *      }
+ * 	    <enter > definition*.get(definition*.size()-1).offset
+ *
+ * 	    int localVarBytes = definition.localVariables.stream().mapToInt(var -> var.type.numberOfBytes).sum()
+ *      int paramBytes = type.parameters.stream().mapToInt(parameter -> parameter.type.numberOfBytes).sum()
+ * 	    statement*.forEach(statement -> execute[[statement]](definition.getType().numberOfBytes, localVarBytes, paramBytes))
+ *
+ *  	if (type.returnType instanceof VoidType) {
+ * 		    <ret > 0, localVarBytes, paramBytes
+ *      }
+ *
+ * execute[[VariableDefinition: definition -> type ID]] =
+ * 	    cg.comment(type.getSimpleName() + " " + ID + " (offset " + definition.offset+")")
+ *
+ * execute[[Program: program -> definition*]] =
+ * 	    <call main>
+ * 	    <halt>
+ * 	    program.definitions.forEach(def -> execute[[def]]);
  *
  */
 public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {

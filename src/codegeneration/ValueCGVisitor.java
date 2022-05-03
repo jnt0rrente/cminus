@@ -5,12 +5,19 @@ import ast.type.CharType;
 
 /**
  * value[[Indexing: expression1 -> expression2 expression3]] =
- * address[[expression1]]
- * <load > expression1.type.suffix()
- * <p>
+ *     address[[expression1]]
+ *     <load > expression1.type.suffix()
+ *     <p>
+ *
  * value[[FieldAccess: expression1 -> expression2 ID]] =
- * address[[expression1]]
- * <load > expression1.type.suffix()
+ *     address[[expression1]]
+ *     <load > expression1.type.suffix()
+ *
+ * value[[FunctionInvocation: expression1 -> expression2 expression3*]] =
+ *     for (Expression exp : expression3*) {
+ *         value[[exp]]
+ *     }
+ *     <call > expression2.getIdentifier();
  */
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     AddressCGVisitor addressCGVisitor;

@@ -1,9 +1,6 @@
 package ast.expression;
 
-import ast.AbstractASTNode;
 import ast.Definition;
-import ast.Expression;
-import ast.Type;
 import semantic.Visitor;
 
 public class Variable extends AbstractExpression {
