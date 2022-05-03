@@ -1,11 +1,11 @@
 package codegeneration;
 
 
-import ast.Definition;
-import ast.Program;
-import ast.Statement;
+import ast.*;
 import ast.definition.FunctionDefinition;
 import ast.definition.VariableDefinition;
+import ast.expression.FunctionInvocation;
+import ast.expression.Variable;
 import ast.statement.*;
 import ast.type.FunctionType;
 import ast.type.VoidType;
@@ -93,7 +93,7 @@ import java.util.List;
  * 	    program.definitions.forEach(def -> execute[[def]]);
  *
  */
-public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
+public class ExecuteCGVisitor extends AbstractCGVisitor<ReturnSizesDTO, Void> {
     AddressCGVisitor addressCGVisitor;
     ValueCGVisitor valueCGVisitor;
     CodeGenerator cg = CodeGenerator.getInstance();
@@ -104,13 +104,13 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(WhileLoop whileLoop, Void param) {
+    public Void visit(WhileLoop whileLoop, ReturnSizesDTO param) {
         cg.shortComment("WhileLoop");
         String conditionLabel = cg.nextLabel();
         String exitLabel = cg.nextLabel();
 
         cg.label(conditionLabel);
-        whileLoop.getCondition().accept(valueCGVisitor, param);
+        whileLoop.getCondition().accept(valueCGVisitor, null);
         cg.jz(exitLabel);
 
         whileLoop.getBody().forEach(statement -> statement.accept(this, param));
@@ -121,12 +121,12 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(IfElse ifElse, Void param) {
+    public Void visit(IfElse ifElse, ReturnSizesDTO param) {
         String exitLabel = cg.nextLabel();
         String elseLabel = cg.nextLabel();
         cg.shortComment("If:");
 
-        ifElse.getCondition().accept(valueCGVisitor, param);
+        ifElse.getCondition().accept(valueCGVisitor, null);
 
         cg.jz(elseLabel);
 
@@ -144,7 +144,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(Program program, Void param) {
+    public Void visit(Program program, ReturnSizesDTO param) {
         cg.writeProgramName();
         Collection<Definition> definitions = program.getDefinitions();
         List<Definition> functionDefs = new ArrayList<Definition>();
@@ -165,15 +165,15 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(Assignment assignment, Void param) {
-        assignment.getLHS().accept(addressCGVisitor, param);
-        assignment.getRHS().accept(valueCGVisitor, param);
+    public Void visit(Assignment assignment, ReturnSizesDTO param) {
+        assignment.getLHS().accept(addressCGVisitor, null);
+        assignment.getRHS().accept(valueCGVisitor, null);
         cg.store(assignment.getLHS().getType().suffix());
         return null;
     }
 
     @Override
-    public Void visit(FunctionDefinition functionDefinition, Void param) {
+    public Void visit(FunctionDefinition functionDefinition, ReturnSizesDTO param) {
         cg.line(functionDefinition.getLine());
         cg.label(functionDefinition.getName());
         cg.shortComment("Parameters:");
@@ -201,25 +201,42 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     @Override
-    public Void visit(VariableDefinition variableDefinition, Void param) {
+    public Void visit(VariableDefinition variableDefinition, ReturnSizesDTO param) {
         cg.longComment(variableDefinition.getType().getTypeName() + " " + variableDefinition.getName() + " (offset " + variableDefinition.getOffset() + ")");
         return null;
     }
 
     @Override
-    public Void visit(Read read, Void param) {
+    public Void visit(Read read, ReturnSizesDTO param) {
         cg.shortComment("Read");
-        read.getReadVal().accept(addressCGVisitor, param);
+        read.getReadVal().accept(addressCGVisitor, null);
         cg.in(read.getReadVal().getType().suffix());
         cg.store(read.getReadVal().getType().suffix());
         return null;
     }
 
     @Override
-    public Void visit(Write write, Void param) {
+    public Void visit(Write write, ReturnSizesDTO param) {
         cg.shortComment("Write");
-        write.getWriteVal().accept(valueCGVisitor, param);
+        write.getWriteVal().accept(valueCGVisitor, null);
         cg.out(write.getWriteVal().getType().suffix());
+        return null;
+    }
+
+    @Override
+    public Void visit(FunctionInvocation functionInvocation, ReturnSizesDTO param) {
+        for (Expression e : functionInvocation.getParameters()) {
+            e.accept(valueCGVisitor, null);
+        }
+        cg.call(functionInvocation.getVariable().getIdentifier(), true);
+        Type returnType = ((FunctionType)functionInvocation.getVariable().getType()).getReturnType();
+        cg.pop(returnType.suffix());
+        return null;
+    }
+
+    @Override
+    public Void visit(Return ret, ReturnSizesDTO param) {
+        cg.ret(param.returnBytes, param.localVarBytes, param.paramBytes);
         return null;
     }
 }

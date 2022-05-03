@@ -1,5 +1,6 @@
 package codegeneration;
 
+import ast.Expression;
 import ast.expression.*;
 import ast.type.CharType;
 
@@ -163,5 +164,12 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
-
+    @Override
+    public Void visit(FunctionInvocation functionInvocation, Void param) {
+        for (Expression exp : functionInvocation.getParameters()) {
+            exp.accept(this, param);
+        }
+        cg.call(functionInvocation.getVariable().getIdentifier(), true);
+        return null;
+    }
 }
