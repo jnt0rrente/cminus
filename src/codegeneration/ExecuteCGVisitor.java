@@ -45,10 +45,10 @@ import java.util.List;
  *     String elseLabel = cg.nextLabel();
  *     value[[expression]]
  *     <jz > elseLabel
- *     statement1*.forEach(st -> execute[[st](int returnBytes, int localVarBytes, int paramBytes)]);
+ *     statement1*.forEach(st -> execute[[st]](int returnBytes, int localVarBytes, int paramBytes));
  *     <jmp > exitLabel
  *     elseLabel <:>
- *     statement2*.forEach(st -> execute[[st](int returnBytes, int localVarBytes, int paramBytes)]);
+ *     statement2*.forEach(st -> execute[[st]](int returnBytes, int localVarBytes, int paramBytes));
  *     exitLabel <:>
  *
  * execute[[FunctionInvocation: statement -> expression expression*]] =
@@ -77,6 +77,7 @@ import java.util.List;
  *
  * 	    int localVarBytes = definition.localVariables.stream().mapToInt(var -> var.type.numberOfBytes).sum()
  *      int paramBytes = type.parameters.stream().mapToInt(parameter -> parameter.type.numberOfBytes).sum()
+ *
  * 	    statement*.forEach(statement -> execute[[statement]](definition.getType().numberOfBytes, localVarBytes, paramBytes))
  *
  *  	if (type.returnType instanceof VoidType) {
