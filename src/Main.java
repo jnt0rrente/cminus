@@ -50,7 +50,7 @@ public class Main {
 
         BufferedWriter bw = new BufferedWriter(new FileWriter(args[1]));
         CodeGenerator codeGenerator = CodeGenerator.getInstance();
-        codeGenerator.setParams(bw, args[1]);
+        codeGenerator.setParams(bw, args[0]);
 
         AddressCGVisitor addressCGVisitor = new AddressCGVisitor();
         ValueCGVisitor valueCGVisitor = new ValueCGVisitor(addressCGVisitor);

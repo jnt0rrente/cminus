@@ -40,7 +40,7 @@ public class CodeGenerator implements MaplSpecificationHandler {
     }
 
     public void writeProgramName() {
-        rawWrite(String.format("#source \"%s\"", programName));
+        rawWrite(String.format("#source \"%s\"\n", programName));
     }
 
     private void writeLine(String line) {

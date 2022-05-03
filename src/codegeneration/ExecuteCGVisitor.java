@@ -57,10 +57,15 @@ import java.util.List;
  *     }
  *     <call > expression.getIdentifier();
  *     Type returnType = expression.getType().getReturnType();
- *     <pop > returnType().suffix()
+ *     if (returnType != null) <pop > returnType().suffix()
  *
  * execute[[Return: statement -> expression]](int returnBytes, int localVarBytes, int paramBytes) =
  *     <ret > returnbytes <,> localVarBytes <,> paramBytes
+ *     push	bp
+ * 	pushi	-5 TODO
+ * 	addi
+ * 	loadb
+ * 	b2i
  *
  * //Definitions
  * execute[[FunctionDefinition: definition -> type ID definition* statement*]] =
@@ -180,21 +185,32 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ReturnSizesDTO, Void> {
         ((FunctionType) functionDefinition.getType()).getParameterVariableDefinitions().forEach(paramDef -> paramDef.accept(this, param));
         cg.shortComment("Local variables:");
         functionDefinition.getBodyVariableDefinitions().forEach(paramDef -> paramDef.accept(this, param));
-        cg.enter(functionDefinition
-                .getBodyVariableDefinitions()
-                .get(functionDefinition.getBodyVariableDefinitions().size() - 1)
-                .getOffset() * -1); //offset of last variable definition
+
+        if (functionDefinition.getBodyVariableDefinitions().size() > 0) {
+            cg.enter(functionDefinition
+                    .getBodyVariableDefinitions()
+                    .get(functionDefinition.getBodyVariableDefinitions().size() - 1)
+                    .getOffset() * -1); //offset of last variable definition
+        } else {
+            cg.enter(0);
+        }
+        int variablesSize = functionDefinition.getBodyVariableDefinitions()
+                .stream().mapToInt(varDef -> varDef.getType().numberOfBytes()).sum();
+
+        int parametersSize = ((FunctionType) functionDefinition.getType()).getParameterVariableDefinitions()
+                .stream().mapToInt(paramDef -> paramDef.getType().numberOfBytes()).sum();
+
+        ReturnSizesDTO functionReturnSizes = new ReturnSizesDTO(
+                ((FunctionType) functionDefinition.getType()).getReturnType().numberOfBytes(),
+                variablesSize,
+                parametersSize
+                );
         for (Statement statement : functionDefinition.getBodyStatements()) {
             cg.line(statement.getLine());
-            statement.accept(this, param);
+            statement.accept(this, functionReturnSizes);
         }
 
         if (((FunctionType) functionDefinition.getType()).getReturnType() instanceof VoidType) {
-            int variablesSize = functionDefinition.getBodyVariableDefinitions()
-                    .stream().mapToInt(varDef -> varDef.getType().numberOfBytes()).sum();
-
-            int parametersSize = ((FunctionType) functionDefinition.getType()).getParameterVariableDefinitions()
-                    .stream().mapToInt(paramDef -> paramDef.getType().numberOfBytes()).sum();
             cg.ret(0, variablesSize, parametersSize);
         }
         return null;
@@ -230,7 +246,9 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ReturnSizesDTO, Void> {
         }
         cg.call(functionInvocation.getVariable().getIdentifier(), true);
         Type returnType = ((FunctionType)functionInvocation.getVariable().getType()).getReturnType();
-        cg.pop(returnType.suffix());
+        if (!(returnType instanceof VoidType)) {
+            cg.pop(returnType.suffix());
+        }
         return null;
     }
 
