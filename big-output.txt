@@ -1,0 +1,650 @@
+#source "big-input.txt"
+	' * record(Int builtin integer, Char builtin character, ) pair (offset 0)
+	' * Array [2,record(Array [type: Struct: 1 records size: 2] employees, )] acme (offset 3)
+	' * Array [8,Array [3,IntType]] fibonacci (offset 11)
+	' Calling the main function.
+call main
+halt
+
+#line 14
+p:
+	' Parameters:
+	' Local variables:
+	enter 0
+	ret 0, 0, 0
+
+#line 16
+f:
+	' Parameters:
+	' * DoubleType r (offset 6)
+	' * IntType e (offset 4)
+	' Local variables:
+	' * DoubleType real (offset -4)
+	' * CharType c (offset -5)
+	' * IntType result (offset -7)
+	enter 7
+
+#line 20
+	pushi bp
+	pushi -4
+	addi
+	pushi bp
+	pushi 6
+	addi
+	loadf
+	pushf 10.0
+	mulf
+	storef
+
+#line 21
+	pushi bp
+	pushi -5
+	addi
+	pushb 48
+	storeb
+
+#line 22
+	' If:
+	pushi bp
+	pushi 4
+	addi
+	loadi
+	pushi 256
+	lti
+	jz label2
+	' Then:
+	pushi bp
+	pushi -5
+	addi
+	pushi bp
+	pushi 4
+	addi
+	loadi
+	i2b
+
+	storeb
+	pushi bp
+	pushi -7
+	addi
+	pushi bp
+	pushi -5
+	addi
+	loadb
+	b2i
+
+	storei
+	jmp label1
+	' Else:
+label2:
+	pushi bp
+	pushi -7
+	addi
+	pushi bp
+	pushi -4
+	addi
+	loadf
+	f2i
+
+	storei
+label1:
+
+#line 28
+	pushi bp
+	pushi -7
+	addi
+	loadi
+	ret 2, 7, 6
+
+#line 31
+initialize:
+	' Parameters:
+	' Local variables:
+	' * IntType i (offset -2)
+	enter 2
+
+#line 33
+	pushi 11
+	pushi 6
+	pushi 0
+	muli
+	addi
+	pushi 2
+	pushi 0
+	muli
+	addi
+	pushi 0
+	storei
+
+#line 34
+	pushi 11
+	pushi 6
+	pushi 0
+	muli
+	addi
+	pushi 2
+	pushi 1
+	muli
+	addi
+	pushi 1
+	storei
+
+#line 35
+	pushi 11
+	pushi 6
+	pushi 0
+	muli
+	addi
+	pushi 2
+	pushi 2
+	muli
+	addi
+	pushi 1
+	storei
+
+#line 36
+	pushi bp
+	pushi -2
+	addi
+	pushi 1
+	storei
+
+#line 37
+	' WhileLoop
+label3:
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 8
+	lti
+	jz label4
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi 0
+	muli
+	addi
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 1
+	subi
+	muli
+	addi
+	pushi 2
+	pushi 1
+	muli
+	addi
+	loadi
+	storei
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi 1
+	muli
+	addi
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 1
+	subi
+	muli
+	addi
+	pushi 2
+	pushi 2
+	muli
+	addi
+	loadi
+	storei
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi 2
+	muli
+	addi
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi 0
+	muli
+	addi
+	loadi
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi 1
+	muli
+	addi
+	loadi
+	addi
+	storei
+	pushi bp
+	pushi -2
+	addi
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label3
+label4:
+	ret 0, 2, 0
+
+#line 47
+main:
+	' Parameters:
+	' Local variables:
+	' * IntType i (offset -2)
+	' * IntType j (offset -4)
+	enter 4
+
+#line 49
+	call p
+
+#line 50
+	pushi bp
+	pushi -2
+	addi
+	pushi 0
+	storei
+
+#line 51
+	pushi 0
+	' Accessing RecordField character
+	pushi 2
+	addi
+	pushb 48
+	storeb
+
+#line 52
+	pushi 0
+	' Accessing RecordField integer
+	pushi 0
+	addi
+	pushb 48
+	b2i
+
+	storei
+
+#line 55
+	' Write
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	i2f
+
+	pushi 0
+	' Accessing RecordField character
+	pushi 2
+	addi
+	loadb
+	b2i
+
+	call f
+	outi
+
+#line 55
+	' Write
+	pushb 10
+	outb
+
+#line 56
+	pushf 1.3
+	pushi 2
+	call f
+	popi
+
+#line 58
+	call initialize
+
+#line 59
+	pushi bp
+	pushi -2
+	addi
+	pushi 0
+	storei
+
+#line 60
+	' WhileLoop
+label5:
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 8
+	lti
+	jz label6
+	' Write
+	pushb 40
+	outb
+	' Write
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 1
+	addi
+	outi
+	' Write
+	pushb 41
+	outb
+	' Write
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi 0
+	muli
+	addi
+	loadi
+	outi
+	' Write
+	pushb 43
+	outb
+	' Write
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi 1
+	muli
+	addi
+	loadi
+	outi
+	' Write
+	pushb 61
+	outb
+	' Write
+	pushi 11
+	pushi 6
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	pushi 2
+	pushi 2
+	muli
+	addi
+	loadi
+	outi
+	' Write
+	pushb 10
+	outb
+	pushi bp
+	pushi -2
+	addi
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label5
+label6:
+
+#line 68
+	pushi 3
+	pushi 4
+	pushi 1
+	muli
+	addi
+	' Accessing RecordField employees
+	pushi 0
+	addi
+	pushi 2
+	pushi 1
+	muli
+	addi
+	' Accessing RecordField age
+	pushi 0
+	addi
+	pushi 56
+	storei
+
+#line 70
+	' Write
+	pushi 3
+	pushi 4
+	pushi 1
+	muli
+	addi
+	' Accessing RecordField employees
+	pushi 0
+	addi
+	pushi 2
+	pushi 1
+	muli
+	addi
+	' Accessing RecordField age
+	pushi 0
+	addi
+	loadi
+	outi
+
+#line 70
+	' Write
+	pushb 10
+	outb
+
+#line 71
+	pushi bp
+	pushi -2
+	addi
+	pushi 0
+	storei
+
+#line 72
+	' WhileLoop
+label7:
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 2
+	lti
+	jz label8
+	pushi bp
+	pushi -4
+	addi
+	pushi 0
+	storei
+	' WhileLoop
+label9:
+	pushi bp
+	pushi -4
+	addi
+	loadi
+	pushi 2
+	lti
+	jz label10
+	pushi 3
+	pushi 4
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	' Accessing RecordField employees
+	pushi 0
+	addi
+	pushi 2
+	pushi bp
+	pushi -4
+	addi
+	loadi
+	muli
+	addi
+	' Accessing RecordField age
+	pushi 0
+	addi
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi bp
+	pushi -4
+	addi
+	loadi
+	addi
+	storei
+	pushi bp
+	pushi -4
+	addi
+	pushi bp
+	pushi -4
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label9
+label10:
+	pushi bp
+	pushi -2
+	addi
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label7
+label8:
+
+#line 82
+	pushi bp
+	pushi -2
+	addi
+	pushi 0
+	storei
+
+#line 83
+	' WhileLoop
+label11:
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 2
+	lti
+	jz label12
+	pushi bp
+	pushi -4
+	addi
+	pushi 0
+	storei
+	' WhileLoop
+label13:
+	pushi bp
+	pushi -4
+	addi
+	loadi
+	pushi 2
+	lti
+	jz label14
+	' Write
+	pushi 3
+	pushi 4
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	muli
+	addi
+	' Accessing RecordField employees
+	pushi 0
+	addi
+	pushi 2
+	pushi bp
+	pushi -4
+	addi
+	loadi
+	muli
+	addi
+	' Accessing RecordField age
+	pushi 0
+	addi
+	loadi
+	outi
+	' Write
+	pushb 32
+	outb
+	pushi bp
+	pushi -4
+	addi
+	pushi bp
+	pushi -4
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label13
+label14:
+	pushi bp
+	pushi -2
+	addi
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label11
+label12:
+	ret 0, 4, 0

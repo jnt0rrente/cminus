@@ -60,8 +60,10 @@ import java.util.List;
  *     if (returnType != null) <pop > returnType().suffix()
  *
  * execute[[Return: statement -> expression]](int returnBytes, int localVarBytes, int paramBytes) =
+ *     value[[expression]]
  *     <ret > returnbytes <,> localVarBytes <,> paramBytes
- *     push	bp
+ *
+ *  push bp
  * 	pushi	-5 TODO
  * 	addi
  * 	loadb
@@ -254,6 +256,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ReturnSizesDTO, Void> {
 
     @Override
     public Void visit(Return ret, ReturnSizesDTO param) {
+        ret.getReturnValue().accept(valueCGVisitor, null);
         cg.ret(param.returnBytes, param.localVarBytes, param.paramBytes);
         return null;
     }

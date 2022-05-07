@@ -69,6 +69,12 @@ f:
 	storeb
 
 #line 19
+	pushi bp
+	pushi -5
+	addi
+	loadb
+	b2i
+
 	ret 2, 5, 6
 
 #line 24
