@@ -9,12 +9,12 @@ fibonacci:
 	' * IntType i (offset 4)
 	' Local variables:
 	' * IntType counter (offset -2)
-	' * Array [15,IntType] numeros (offset -32)
-	enter 32
+	' * Array [30,IntType] numeros (offset -62)
+	enter 62
 
 #line 5
 	pushi bp
-	pushi -32
+	pushi -62
 	addi
 	pushi 2
 	pushi 0
@@ -25,7 +25,7 @@ fibonacci:
 
 #line 6
 	pushi bp
-	pushi -32
+	pushi -62
 	addi
 	pushi 2
 	pushi 1
@@ -36,7 +36,7 @@ fibonacci:
 
 #line 7
 	pushi bp
-	pushi -32
+	pushi -62
 	addi
 	pushi 2
 	pushi 2
@@ -52,13 +52,28 @@ fibonacci:
 
 #line 9
 	' Write
-	pushi 1
-	outi
+	pushb 32
+	outb
 
 #line 9
 	' Write
 	pushi 1
 	outi
+
+#line 9
+	' Write
+	pushb 32
+	outb
+
+#line 9
+	' Write
+	pushi 1
+	outi
+
+#line 9
+	' Write
+	pushb 32
+	outb
 
 #line 11
 	pushi bp
@@ -81,7 +96,7 @@ label1:
 	lti
 	jz label2
 	pushi bp
-	pushi -32
+	pushi -62
 	addi
 	pushi 2
 	pushi bp
@@ -91,7 +106,7 @@ label1:
 	muli
 	addi
 	pushi bp
-	pushi -32
+	pushi -62
 	addi
 	pushi 2
 	pushi bp
@@ -104,7 +119,7 @@ label1:
 	addi
 	loadi
 	pushi bp
-	pushi -32
+	pushi -62
 	addi
 	pushi 2
 	pushi bp
@@ -120,7 +135,7 @@ label1:
 	storei
 	' Write
 	pushi bp
-	pushi -32
+	pushi -62
 	addi
 	pushi 2
 	pushi bp
@@ -131,6 +146,9 @@ label1:
 	addi
 	loadi
 	outi
+	' Write
+	pushb 32
+	outb
 	pushi bp
 	pushi -2
 	addi
@@ -144,18 +162,18 @@ label1:
 	jmp label1
 label2:
 
-#line 18
+#line 19
 	pushi 0
-	ret 2, 32, 2
+	ret 2, 62, 2
 
-#line 21
+#line 22
 main:
 	' Parameters:
 	' Local variables:
 	' * IntType a (offset -2)
 	enter 2
 
-#line 24
+#line 25
 	' Read
 	pushi bp
 	pushi -2
@@ -163,11 +181,103 @@ main:
 	ini
 	storei
 
-#line 25
+#line 26
+	' Write
 	pushi bp
 	pushi -2
 	addi
 	loadi
+	outi
+
+#line 26
+	' Write
+	pushb 63
+	outb
+
+#line 27
+	' Write
+	pushb 32
+	outb
+
+#line 28
+	' Write
+	pushb 110
+	outb
+
+#line 28
+	' Write
+	pushb 111
+	outb
+
+#line 28
+	' Write
+	pushb 44
+	outb
+
+#line 29
+	' Write
+	pushb 32
+	outb
+
+#line 30
+	' Write
+	pushb 115
+	outb
+
+#line 30
+	' Write
+	pushb 111
+	outb
+
+#line 30
+	' Write
+	pushb 108
+	outb
+
+#line 30
+	' Write
+	pushb 111
+	outb
+
+#line 30
+	' Write
+	pushb 32
+	outb
+
+#line 31
+	' Write
+	pushb 51
+	outb
+
+#line 31
+	' Write
+	pushb 48
+	outb
+
+#line 31
+	' Write
+	pushb 10
+	outb
+
+#line 32
+	pushi 30
 	call fibonacci
 	popi
+
+#line 34
+	pushi bp
+	pushi -2
+	addi
+	pushi 17711
+	pushi 28657
+	addi
+	storei
+
+#line 35
+	' Write
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	outi
 	ret 0, 2, 0

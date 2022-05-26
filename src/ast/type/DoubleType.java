@@ -20,23 +20,23 @@ public class DoubleType extends AbstractType {
     }
 
     @Override
-    public Type arithmetic(Type type2) {
+    public Type arithmetic(Type type2, int line, int column) {
         if (type2 instanceof DoubleType) return new DoubleType(this.getLine(),this.getColumn());
         if (type2 instanceof IntType) return new DoubleType(this.getLine(),this.getColumn());
 
-        return super.arithmetic(type2);
+        return super.arithmetic(type2, line, column);
     }
 
     @Override
-    public Type comparedTo(Type type2) {
+    public Type comparedTo(Type type2, int line, int column) {
         if (type2 instanceof DoubleType) return new IntType(0,0);
         if (type2 instanceof IntType) return new IntType(0,0);
 
-        return super.comparedTo(type2);
+        return super.comparedTo(type2, line, column);
     }
 
     @Override
-    public Type unaryMinus() {
+    public Type unaryMinus(int line, int column) {
         return this;
     }
 
@@ -46,16 +46,16 @@ public class DoubleType extends AbstractType {
     }
 
     @Override
-    public void written() {
+    public void written(int line, int column) {
 
     }
 
     @Override
-    public Type castTo(Type type2) {
+    public Type castTo(Type type2, int line, int column) {
         if (type2 instanceof IntType) return type2;
         if (type2 instanceof DoubleType) return this;
         if (type2 instanceof CharType) return type2;
-        return super.castTo(type2);
+        return super.castTo(type2, line, column);
     }
 
     @Override

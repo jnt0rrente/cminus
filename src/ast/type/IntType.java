@@ -21,45 +21,45 @@ public class IntType extends AbstractType {
     }
 
     @Override
-    public Type arithmetic(Type type2) {
+    public Type arithmetic(Type type2, int line, int column) {
         if (type2 instanceof IntType) return new IntType(this.getLine(), this.getColumn());
         if (type2 instanceof DoubleType) return new DoubleType(this.getLine(), this.getColumn());
 
-        return super.arithmetic(type2);
+        return super.arithmetic(type2, line, column);
     }
 
     @Override
-    public Type castTo(Type type2) {
+    public Type castTo(Type type2, int line, int column) {
         if (type2 instanceof CharType) return type2;
         if (type2 instanceof IntType) return this;
         if (type2 instanceof DoubleType) return type2;
 
-        return super.castTo(type2);
+        return super.castTo(type2, line, column);
     }
 
     @Override
-    public Type comparedTo(Type type2) {
+    public Type comparedTo(Type type2, int line, int column) {
         if (type2 instanceof IntType) return this;
         if (type2 instanceof DoubleType) return this;
         if (type2 instanceof CharType) return this;
 
-        return super.comparedTo(type2);
+        return super.comparedTo(type2, line, column);
     }
 
     @Override
-    public Type logical(Type type2) {
+    public Type logical(Type type2, int line, int column) {
         if (type2 instanceof IntType) return this;
 
-        return super.logical(type2);
+        return super.logical(type2, line, column);
     }
 
     @Override
-    public Type unaryMinus() {
+    public Type unaryMinus(int line, int column) {
         return this;
     }
 
     @Override
-    public Type unaryNot() {
+    public Type unaryNot(int line, int column) {
         return this;
     }
 
@@ -69,18 +69,18 @@ public class IntType extends AbstractType {
     }
 
     @Override
-    public void asBoolean() {
+    public void asBoolean(int line, int column) {
 
     }
 
     @Override
-    public void returnedAs(Type type2) {
+    public void returnedAs(Type type2, int line, int column) {
         if (type2 instanceof DoubleType) return;
-        super.returnedAs(type2);
+        super.returnedAs(type2, line, column);
     }
 
     @Override
-    public void written() {
+    public void written(int line, int column) {
 
     }
 

@@ -12,73 +12,73 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     @Override
-    public Type arithmetic(Type type2) {
+    public Type arithmetic(Type type2, int line, int column) {
         if (type2 instanceof ErrorType) return type2;
-        return new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot use arithmetic operators on %s and %s.", this.getTypeName(), type2.getTypeName()));
+        return new ErrorType(line, column, String.format("Cannot use arithmetic operators on %s and %s.", this.getTypeName(), type2.getTypeName()));
     }
 
     @Override
-    public Type comparedTo(Type type2) {
+    public Type comparedTo(Type type2, int line, int column) {
         if (type2 instanceof ErrorType) return type2;
-        return new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot compare %s and %s.", this.getTypeName(), type2.getTypeName()));
+        return new ErrorType(line, column, String.format("Cannot compare %s and %s.", this.getTypeName(), type2.getTypeName()));
     }
 
     @Override
-    public Type dot(String name) {
-        return new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot field access %s.", this.getTypeName()));
+    public Type dot(String name, int line, int column) {
+        return new ErrorType(line, column, String.format("Cannot field access %s.", this.getTypeName()));
     }
 
     @Override
-    public Type parentheses(List<Type> argTypes) {
+    public Type parentheses(List<Type> argTypes, int line, int column) {
         for (Type t :
                 argTypes) {
             if (t instanceof ErrorType) return this;
         }
-        return new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot invoke %s.", this.getTypeName()));
+        return new ErrorType(line, column, String.format("Cannot invoke %s.", this.getTypeName()));
     }
 
     @Override
-    public Type squareBrackets(Type type2) {
+    public Type squareBrackets(Type type2, int line, int column) {
         if (type2 instanceof ErrorType) return type2;
-        return new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot index access %s with %s.", this.getTypeName(), type2.getTypeName()));
+        return new ErrorType(line, column, String.format("Cannot index access %s with %s.", this.getTypeName(), type2.getTypeName()));
     }
 
     @Override
-    public Type logical(Type type2) {
+    public Type logical(Type type2, int line, int column) {
         if (type2 instanceof ErrorType) return type2;
-        return new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot use logical operators on %s and %s.", this.getTypeName(), type2.getTypeName()));
+        return new ErrorType(line, column, String.format("Cannot use logical operators on %s and %s.", this.getTypeName(), type2.getTypeName()));
     }
 
     @Override
-    public Type unaryMinus() {
-        return new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot use unary minus on %s.", this.getTypeName()));
+    public Type unaryMinus(int line, int column) {
+        return new ErrorType(line, column, String.format("Cannot use unary minus on %s.", this.getTypeName()));
     }
 
     @Override
-    public Type unaryNot() {
-        return new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot use unary not on %s.", this.getTypeName()));
+    public Type unaryNot(int line, int column) {
+        return new ErrorType(line, column, String.format("Cannot use unary not on %s.", this.getTypeName()));
     }
 
     @Override
-    public Type castTo(Type type2) {
-        return new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot cast %s to %s.", this.getTypeName(), type2.getTypeName()));
+    public Type castTo(Type type2, int line, int column) {
+        return new ErrorType(line, column, String.format("Cannot cast %s to %s.", this.getTypeName(), type2.getTypeName()));
     }
 
     @Override
-    public void returnedAs(Type type2) {
+    public void returnedAs(Type type2, int line, int column) {
         if (type2 instanceof ErrorType) return;
         if (this.getClass().equals(type2.getClass())) return;
-        new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot return %s in place of %s.", this.getTypeName(), type2.getTypeName()));
+        new ErrorType(line, column, String.format("Cannot return %s in place of %s.", this.getTypeName(), type2.getTypeName()));
     }
 
     @Override
-    public void asBoolean() {
-        new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot use %s as boolean condition.", this.getTypeName()));
+    public void asBoolean(int line, int column) {
+        new ErrorType(line, column, String.format("Cannot use %s as boolean condition.", this.getTypeName()));
     }
 
     @Override
-    public void written() {
-        new ErrorType(this.getLine(), this.getColumn(), String.format("Cannot write %s.", this.getTypeName()));
+    public void written(int line, int column) {
+        new ErrorType(line, column, String.format("Cannot write %s.", this.getTypeName()));
     }
 
     @Override

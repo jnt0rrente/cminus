@@ -41,24 +41,23 @@ public class Main {
         ast.accept(new OffsetVisitor(), null);
 
         if (ErrorHandler.getInstance().anyErrors())
-            ErrorHandler.getInstance().showErrors(System.err);
+            //ErrorHandler.getInstance().showErrors(System.err);
+            ErrorHandler.getInstance().showErrorsSorted(System.err);
+        else {
+//          IntrospectorModel model = new IntrospectorModel("Program", ast);
+//          new IntrospectorTree("Introspector", model);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(args[1]));
+            CodeGenerator codeGenerator = CodeGenerator.getInstance();
+            codeGenerator.setParams(bw, args[0]);
 
-//        else {
-//            IntrospectorModel model = new IntrospectorModel("Program", ast);
-//            new IntrospectorTree("Introspector", model);
-//        }
+            AddressCGVisitor addressCGVisitor = new AddressCGVisitor();
+            ValueCGVisitor valueCGVisitor = new ValueCGVisitor(addressCGVisitor);
+            addressCGVisitor.setValueCGVisitor(valueCGVisitor);
+            ExecuteCGVisitor executeCGVisitor = new ExecuteCGVisitor(addressCGVisitor, valueCGVisitor);
 
-        BufferedWriter bw = new BufferedWriter(new FileWriter(args[1]));
-        CodeGenerator codeGenerator = CodeGenerator.getInstance();
-        codeGenerator.setParams(bw, args[0]);
-
-        AddressCGVisitor addressCGVisitor = new AddressCGVisitor();
-        ValueCGVisitor valueCGVisitor = new ValueCGVisitor(addressCGVisitor);
-        addressCGVisitor.setValueCGVisitor(valueCGVisitor);
-        ExecuteCGVisitor executeCGVisitor = new ExecuteCGVisitor(addressCGVisitor, valueCGVisitor);
-
-        ast.accept(executeCGVisitor, null);
-        bw.close();
+            ast.accept(executeCGVisitor, null);
+            bw.close();
+        }
     }
 
 

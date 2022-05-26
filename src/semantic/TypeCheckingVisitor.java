@@ -140,7 +140,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
 
         Type type1 = arithmetic.getOperand1().getType(); //clarity
         Type type2 = arithmetic.getOperand2().getType();
-        arithmetic.setType(type1.arithmetic(type2));
+        arithmetic.setType(type1.arithmetic(type2, arithmetic.getLine(), arithmetic.getColumn()));
 
         return null;
     }
@@ -152,7 +152,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
 
         Type castedType = cast.getExpression().getType();
         Type targetType = cast.getCastType();
-        cast.setType(castedType.castTo(targetType));
+        cast.setType(castedType.castTo(targetType, cast.getLine(), cast.getColumn()));
 
         return null;
     }
@@ -165,7 +165,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
 
         Type type1 = comparison.getOperand1().getType();
         Type type2 = comparison.getOperand2().getType();
-        comparison.setType(type1.comparedTo(type2));
+        comparison.setType(type1.comparedTo(type2, comparison.getLine(), comparison.getColumn()));
         return null;
     }
 
@@ -176,7 +176,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
 
         Type type = fieldAccess.getExpression().getType();
         String name = fieldAccess.getName();
-        fieldAccess.setType(type.dot(name));
+        fieldAccess.setType(type.dot(name, fieldAccess.getLine(), fieldAccess.getColumn()));
         return null;
     }
 
@@ -188,7 +188,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
 
         Type returnType = functionInvocation.getVariable().getType();
         List<Type> parameterTypes = functionInvocation.getParameters().stream().map(Expression::getType).collect(Collectors.toList());
-        functionInvocation.setType(returnType.parentheses(parameterTypes));
+        functionInvocation.setType(returnType.parentheses(parameterTypes, functionInvocation.getLine(), functionInvocation.getColumn()));
         return null;
     }
 
@@ -200,7 +200,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
 
         Type type1 = indexing.getArray().getType();
         Type type2 = indexing.getIndex().getType();
-        indexing.setType(type1.squareBrackets(type2));
+        indexing.setType(type1.squareBrackets(type2, indexing.getLine(), indexing.getColumn()));
         return null;
     }
 
@@ -213,7 +213,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
 
         Type type1 = logical.getOperand1().getType();
         Type type2 = logical.getOperand2().getType();
-        logical.setType(type1.logical(type2));
+        logical.setType(type1.logical(type2, logical.getLine(), logical.getColumn()));
         return null;
     }
 
@@ -224,7 +224,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         unaryMinus.setLvalue(false);
 
         Type type1 = unaryMinus.getTarget().getType();
-        unaryMinus.setType(type1.unaryMinus());
+        unaryMinus.setType(type1.unaryMinus(unaryMinus.getLine(), unaryMinus.getColumn()));
         return null;
     }
 
@@ -235,7 +235,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         unaryNot.setLvalue(false);
 
         Type type1 = unaryNot.getTarget().getType();
-        unaryNot.setType(type1.unaryNot());
+        unaryNot.setType(type1.unaryNot(unaryNot.getLine(), unaryNot.getColumn()));
         return null;
     }
 
@@ -247,7 +247,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         ifElse.getBody().forEach(s -> s.accept(this, param));
         ifElse.getBodyElse().forEach(s -> s.accept(this, param));
 
-        ifElse.getCondition().getType().asBoolean();
+        ifElse.getCondition().getType().asBoolean(ifElse.getLine(), ifElse.getColumn());
         for (Statement st : ifElse.getBody()) {
             st.setReturnType(ifElse.getReturnType());
         }
@@ -264,7 +264,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         ret.getReturnType().accept(this, param);
         ret.getReturnValue().accept(this, param);
 
-        ret.getReturnValue().getType().returnedAs(ret.getReturnType());
+        ret.getReturnValue().getType().returnedAs(ret.getReturnType(), ret.getLine(), ret.getColumn());
         return null;
     }
 
@@ -273,7 +273,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         whileLoop.getCondition().accept(this, param);
         whileLoop.getBody().forEach(statement -> statement.accept(this, param));
 
-        whileLoop.getCondition().getType().asBoolean();
+        whileLoop.getCondition().getType().asBoolean(whileLoop.getLine(), whileLoop.getColumn());
         for (Statement st : whileLoop.getBody()) {
             st.setReturnType(whileLoop.getReturnType());
         }
@@ -284,7 +284,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
     public Void visit(Write write, Type param) {
         write.getWriteVal().accept(this, param);
 
-        write.getWriteVal().getType().written();
+        write.getWriteVal().getType().written(write.getLine(), write.getColumn());
 
         return null;
     }

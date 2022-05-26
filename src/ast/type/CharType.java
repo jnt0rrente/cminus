@@ -19,15 +19,15 @@ public class CharType extends AbstractType {
     }
 
     @Override
-    public Type castTo(Type type2) {
+    public Type castTo(Type type2, int line, int column) {
         if (type2 instanceof IntType) return type2;
         if (type2 instanceof DoubleType) return type2;
         if (type2 instanceof CharType) return this;
-        return super.castTo(type2);
+        return super.castTo(type2, line, column);
     }
 
     @Override
-    public Type arithmetic(Type type2) {
+    public Type arithmetic(Type type2, int line, int column) {
         return new IntType(getLine(), getColumn());
     }
 
@@ -37,14 +37,14 @@ public class CharType extends AbstractType {
     }
 
     @Override
-    public void returnedAs(Type type2) {
+    public void returnedAs(Type type2, int line, int column) {
         if (type2 instanceof IntType) return;
         if (type2 instanceof DoubleType) return;
-        super.returnedAs(type2);
+        super.returnedAs(type2, line, column);
     }
 
     @Override
-    public void written() {
+    public void written(int line, int column) {
 
     }
 

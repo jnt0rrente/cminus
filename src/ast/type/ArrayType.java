@@ -34,11 +34,11 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
-    public Type squareBrackets(Type type2) {
+    public Type squareBrackets(Type type2, int line, int column) {
         if (type2 instanceof IntType) {
             return this.elementType;
         } else {
-            return super.squareBrackets(type2);
+            return super.squareBrackets(type2, line, column);
         }
     }
 

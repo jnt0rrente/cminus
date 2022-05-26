@@ -36,14 +36,14 @@ public class FunctionType extends AbstractType {
     }
 
     @Override
-    public Type parentheses(List<Type> argTypes) {
+    public Type parentheses(List<Type> argTypes, int line, int column) {
         if (argTypes.size() != getParameterVariableDefinitions().size())
-            return new ErrorType(this.getLine(), this.getColumn(), "Wrong arguments size for function call.");
+            return new ErrorType(line, column, "Wrong arguments size for function call.");
         else {
             List<VariableDefinition> declaredParams = getParameterVariableDefinitions();
             for (int i = 0; i < argTypes.size(); i++) {
                 if (argTypes.get(i).getClass() != declaredParams.get(i).getType().getClass()) {
-                    return new ErrorType(this.getLine(), this.getColumn(),
+                    return new ErrorType(line, column,
                             "Wrong type on parameter " + i + ":"
                                     + " Expected " + declaredParams.get(i).getType().getTypeName()
                                     + " but got " + argTypes.get(i).getTypeName());

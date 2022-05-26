@@ -37,60 +37,60 @@ public class ErrorType extends AbstractType {
     }
 
     @Override
-    public Type arithmetic(Type type2) {
+    public Type arithmetic(Type type2, int line, int column) {
         return this;
     }
 
     @Override
-    public Type comparedTo(Type type2) {
+    public Type comparedTo(Type type2, int line, int column) {
         return this;
     }
 
     @Override
-    public Type dot(String name) {
+    public Type dot(String name, int line, int column) {
         return this;
     }
 
     @Override
-    public Type parentheses(List<Type> argTypes) {
+    public Type parentheses(List<Type> argTypes, int line, int column) {
         return this;
     }
 
     @Override
-    public Type squareBrackets(Type type2) {
+    public Type squareBrackets(Type type2, int line, int column) {
         return this;
     }
 
     @Override
-    public Type logical(Type type2) {
+    public Type logical(Type type2, int line, int column) {
         return this;
     }
 
     @Override
-    public Type unaryMinus() {
+    public Type unaryMinus(int line, int column) {
         return this;
     }
 
     @Override
-    public Type unaryNot() {
+    public Type unaryNot(int line, int column) {
         return this;
     }
 
     @Override
-    public Type castTo(Type type2) {
+    public Type castTo(Type type2, int line, int column) {
         return this;
     }
 
     @Override
-    public void returnedAs(Type type2) {
+    public void returnedAs(Type type2, int line, int column) {
     }
 
     @Override
-    public void asBoolean() {
+    public void asBoolean(int line, int column) {
     }
 
     @Override
-    public void written() {
+    public void written(int line, int column) {
     }
 
     @Override

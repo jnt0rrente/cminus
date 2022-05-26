@@ -7,18 +7,63 @@ import ast.type.CharType;
 /**
  * value[[Indexing: expression1 -> expression2 expression3]] =
  *     address[[expression1]]
- *     <load > expression1.type.suffix()
- *     <p>
+ *     <load> expression1.type.suffix()
  *
  * value[[FieldAccess: expression1 -> expression2 ID]] =
  *     address[[expression1]]
- *     <load > expression1.type.suffix()
+ *     <load> expression1.type.suffix()
  *
  * value[[FunctionInvocation: expression1 -> expression2 expression3*]] =
  *     for (Expression exp : expression3*) {
  *         value[[exp]]
  *     }
  *     <call > expression2.getIdentifier();
+ *
+ * value[[Cast: expression1 -> type expression2]] =
+ *     value[[expression2]]
+ *     cg.convertTypes(expression1, expression2);
+ *
+ * value[[Comparison: expression1 -> expression2 expression3]] =
+ *     value[[expression2]]
+ *     if (!expression2.type.promotesTo(expression1.type)) error()
+ *     value[[expression3]]
+ *     cg.convertTypes(expression3, expression1);
+ *     cg.comparison(expression1.operator)
+ *
+ * value[[Logical: expression1 -> expression2 expression3]] =
+ *     value[[expression2]]
+ *     value[[expression3]]
+ *     cg.logical(expression1.operator)
+ *
+ * value[[Variable: expression1 -> ID]] =
+ *     address[[expression1]]
+ *     <load> expression1.type.suffix
+ *
+ * value[[Arithmetic: expression1 -> expression2 expression3]] =
+ *     value[[expression2]]
+ *     cg.convertTypes(expression2, expression1);
+ *     value[[expression3]]
+ *     cg.convertTypes(expression3, expression1);
+ *     cg.arithmetic(expression1.operator)
+ *
+ * value[[CharLiteral: expression1 -> charLiteral]] =
+ *     <push> expression1.type.suffix() charLiteral.value
+ *
+ * value[[IntLiteral: expression1 -> intLiteral]] =
+ *     <push> expression1.type.suffix() intLiteral.value
+ *
+ * value[[RealLiteral: expression1 -> doubleLiteral]] =
+ *     <push> expression1.type.suffix() doubleLiteral.value
+ *
+ * value[[UnaryMinus: expression1 -> expression2]] =
+ *     value[[expression2]]
+ *     <push> expression1.type.suffix <-1>
+ *     <mul> expression1.type.suffix
+ *
+ * value[[UnaryNot: expression1 -> expression2]] =
+ *     value[[expression2]]
+ *     <not>
+ *
  */
 public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     AddressCGVisitor addressCGVisitor;

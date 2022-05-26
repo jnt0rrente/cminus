@@ -52,14 +52,14 @@ public class StructType extends AbstractType {
     }
 
     @Override
-    public Type dot(String name) {
+    public Type dot(String name, int line, int column) {
         for (RecordField r : getRecords()) {
             if (r.getName().equals(name)) {
                 return r.getType();
             }
         }
 
-        return new ErrorType(this.getLine(),this.getColumn(), String.format("Field %s does not exist.", name));
+        return new ErrorType(line, column, String.format("Field %s does not exist.", name));
     }
 
     @Override

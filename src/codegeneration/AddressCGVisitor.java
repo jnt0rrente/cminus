@@ -13,10 +13,20 @@ import ast.expression.Variable;
  * <muli>
  * <addi>
  * <p>
+ *
  * address[[FieldAccess: expression1 -> expression2 ID]] =
  * address[[expression2]]
  * expression2.getRecord(ID).offset
  * <addi>
+ *
+ * address[[Variable: expression1 -> ID]] =
+ *   if (expression1.definition.scope == 0) {
+ *       <pushi> expression1.definition.offset;
+ *   } else {
+ *       <pushi bp>
+ *       <pushi> expression1.definition.offset;
+ *       <addi>
+ *   }
  */
 public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
     ValueCGVisitor valueCGVisitor;
@@ -24,6 +34,18 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
 
     public void setValueCGVisitor(ValueCGVisitor valueCGVisitor) {
         this.valueCGVisitor = valueCGVisitor;
+    }
+
+    @Override
+    public Void visit(Variable variable, Void param) {
+        if (variable.getDefinition().getScope() == 0) { //globals
+            cg.push('i', "" + ((VariableDefinition) variable.getDefinition()).getOffset());
+        } else {
+            cg.push('i', "bp");
+            cg.push('i', ""+((VariableDefinition) variable.getDefinition()).getOffset());
+            cg.add('i');
+        }
+        return null;
     }
 
     @Override
@@ -45,15 +67,5 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
-    @Override
-    public Void visit(Variable variable, Void param) {
-        if (variable.getDefinition().getScope() == 0) { //globals
-            cg.push('i', "" + ((VariableDefinition) variable.getDefinition()).getOffset());
-        } else {
-            cg.push('i', "bp");
-            cg.push('i', ""+((VariableDefinition) variable.getDefinition()).getOffset());
-            cg.add('i');
-        }
-        return null;
-    }
+
 }
