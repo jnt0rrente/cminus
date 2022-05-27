@@ -50,6 +50,7 @@ expression returns [Expression ast]:
 	| i1=intLiteral  {$ast = $i1.ast; }
 	| r1=REAL_CONSTANT {$ast = new RealLiteral($r1.getLine(), $r1.getCharPositionInLine()+1, LexerHelper.lexemeToReal($r1.text)); }
 	| c1=CHAR_CONSTANT {$ast = new CharLiteral($c1.getLine(), $c1.getCharPositionInLine()+1, LexerHelper.lexemeToChar($c1.text)); }
+	| b2=BOOLEAN_CONSTANT {$ast = new BooleanLiteral($b2.getLine(), $b2.getCharPositionInLine()+1, LexerHelper.lexemeToBoolean($b2.text)); }
 	;
 
 intLiteral returns [IntLiteral ast]:
@@ -124,6 +125,7 @@ struct_type returns [StructType ast]:
 builtin_type returns [Type ast]: s='int' {$ast = new IntType($s.getLine(), $s.getCharPositionInLine()+1);}
 	| s='double'{$ast = new DoubleType($s.getLine(), $s.getCharPositionInLine()+1);}
 	| s='char'{$ast = new CharType($s.getLine(), $s.getCharPositionInLine()+1);}
+	| s='boolean'{$ast = new BooleanType($s.getLine(), $s.getCharPositionInLine()+1);}
 	;
 
 struct_body returns [List<RecordField> ast = new ArrayList<RecordField>()]:
@@ -203,7 +205,11 @@ main_function_definition returns [FunctionDefinition ast]:
 WS: [ \n\t\r]+ -> skip
 	;
 
-ID: [a-zA-Z_][a-zA-Z0-9_]*
+BOOLEAN_CONSTANT: 'true'
+			| 'false'
+			;
+
+ID: ([a-zA-Z_][a-zA-Z0-9_]*)
     ;
 
 INT_CONSTANT: '0'
@@ -229,3 +235,4 @@ MULTI_LINE_COMMENT: '/*'.*?'*/' -> skip;
 
 
 SINGLE_LINE_COMMENT: '//'.*?('\n'|EOF) -> skip;
+

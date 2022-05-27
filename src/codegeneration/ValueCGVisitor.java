@@ -2,6 +2,7 @@ package codegeneration;
 
 import ast.Expression;
 import ast.expression.*;
+import ast.type.BooleanType;
 import ast.type.CharType;
 
 /**
@@ -191,6 +192,12 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(RealLiteral realLiteral, Void param) {
         cg.push(realLiteral.getType().suffix(), "" + realLiteral.getValue());
+        return null;
+    }
+
+    @Override
+    public Void visit(BooleanLiteral booleanLiteral, Void param) {
+        cg.push(booleanLiteral.getType().suffix(), booleanLiteral.getValue() ? "1" : "0");
         return null;
     }
 

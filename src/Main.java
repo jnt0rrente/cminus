@@ -41,11 +41,11 @@ public class Main {
         ast.accept(new OffsetVisitor(), null);
 
         if (ErrorHandler.getInstance().anyErrors())
-            //ErrorHandler.getInstance().showErrors(System.err);
-            ErrorHandler.getInstance().showErrorsSorted(System.err);
+            ErrorHandler.getInstance().showErrors(System.err);
+            // ErrorHandler.getInstance().showErrorsSorted(System.err);
         else {
-//          IntrospectorModel model = new IntrospectorModel("Program", ast);
-//          new IntrospectorTree("Introspector", model);
+//            IntrospectorModel model = new IntrospectorModel("Program", ast);
+//            new IntrospectorTree("Introspector", model);
             BufferedWriter bw = new BufferedWriter(new FileWriter(args[1]));
             CodeGenerator codeGenerator = CodeGenerator.getInstance();
             codeGenerator.setParams(bw, args[0]);

@@ -72,7 +72,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     @Override
-    public void asBoolean(int line, int column) {
+    public void isBoolean(int line, int column) {
         new ErrorType(line, column, String.format("Cannot use %s as boolean condition.", this.getTypeName()));
     }
 

@@ -131,6 +131,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         return null;
     }
 
+    @Override
+    public Void visit(BooleanLiteral booleanLiteral, Type param) {
+        booleanLiteral.setLvalue(false);
+        booleanLiteral.setType(new BooleanType(booleanLiteral.getLine(), booleanLiteral.getColumn()));
+        return null;
+    }
 
     @Override
     public Void visit(Arithmetic arithmetic, Type param) {
@@ -247,7 +253,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         ifElse.getBody().forEach(s -> s.accept(this, param));
         ifElse.getBodyElse().forEach(s -> s.accept(this, param));
 
-        ifElse.getCondition().getType().asBoolean(ifElse.getLine(), ifElse.getColumn());
+        ifElse.getCondition().getType().isBoolean(ifElse.getLine(), ifElse.getColumn());
         for (Statement st : ifElse.getBody()) {
             st.setReturnType(ifElse.getReturnType());
         }
@@ -273,7 +279,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         whileLoop.getCondition().accept(this, param);
         whileLoop.getBody().forEach(statement -> statement.accept(this, param));
 
-        whileLoop.getCondition().getType().asBoolean(whileLoop.getLine(), whileLoop.getColumn());
+        whileLoop.getCondition().getType().isBoolean(whileLoop.getLine(), whileLoop.getColumn());
         for (Statement st : whileLoop.getBody()) {
             st.setReturnType(whileLoop.getReturnType());
         }
@@ -294,6 +300,10 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         assignment.getLHS().accept(this, param);
         assignment.getRHS().accept(this, param);
 
+
+        if (assignment.getRHS().getType() instanceof ErrorType) {
+            return null;
+        }
         if (!assignment.getLHS().getLvalue()) {
             new ErrorType(assignment.getLHS().getLine(), assignment.getLHS().getColumn(), "L-value required on assignment.");
         }

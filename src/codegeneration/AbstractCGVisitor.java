@@ -349,4 +349,16 @@ public abstract class AbstractCGVisitor<TP, TR> implements Visitor<TP, TR> {
         new ErrorType(arrayType.getLine(), arrayType.getColumn(), "This visitor cannot visit this node.");
         return null;
     }
+
+    @Override
+    public TR visit(BooleanType booleanType, TP param) {
+        new ErrorType(booleanType.getLine(), booleanType.getColumn(), "This visitor cannot visit this node.");
+        return null;
+    }
+
+    @Override
+    public TR visit(BooleanLiteral booleanLiteral, TP param) {
+        new ErrorType(booleanLiteral.getLine(), booleanLiteral.getColumn(), "This visitor cannot visit this node.");
+        return null;
+    }
 }

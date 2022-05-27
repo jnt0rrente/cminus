@@ -29,8 +29,8 @@ public class DoubleType extends AbstractType {
 
     @Override
     public Type comparedTo(Type type2, int line, int column) {
-        if (type2 instanceof DoubleType) return new IntType(0,0);
-        if (type2 instanceof IntType) return new IntType(0,0);
+        if (type2 instanceof DoubleType) return new BooleanType(line, column);
+        if (type2 instanceof IntType) return new IntType(line, column);
 
         return super.comparedTo(type2, line, column);
     }

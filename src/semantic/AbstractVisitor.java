@@ -205,4 +205,14 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR> {
         arrayType.getSize().accept(this,param);
         return null;
     }
+
+    @Override
+    public TR visit(BooleanType booleanType, TP param) {
+        return null;
+    }
+
+    @Override
+    public TR visit(BooleanLiteral booleanLiteral, TP param) {
+        return null;
+    }
 }

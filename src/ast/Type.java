@@ -23,7 +23,7 @@ public interface Type extends ASTNode {
 
     public String getTypeName();
 
-    public void asBoolean(int line, int column);
+    public void isBoolean(int line, int column);
 
     public void returnedAs(Type returnType, int line, int column);
 

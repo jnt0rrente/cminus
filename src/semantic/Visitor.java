@@ -69,5 +69,9 @@ public interface Visitor<TP, TR> {
     TR visit(VoidType voidType, TP param);
 
     TR visit(ArrayType arrayType, TP param);
+
+    TR visit(BooleanLiteral booleanLiteral, TP param);
+
+    TR visit(BooleanType booleanType, TP param);
 }
 

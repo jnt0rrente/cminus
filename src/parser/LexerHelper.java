@@ -46,4 +46,13 @@ public class LexerHelper {
 		}
 		return -1;
 	}
+
+	public static boolean lexemeToBoolean(String str) {
+		try {
+			return Boolean.parseBoolean(str);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return false;
+	}
 }

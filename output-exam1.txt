@@ -1,0 +1,193 @@
+#source "exam1.txt"
+	' Calling the main function.
+call main
+halt
+
+#line 1
+f:
+	' Parameters:
+	' * BooleanType a (offset 8)
+	' * BooleanType b (offset 6)
+	' * BooleanType c (offset 4)
+	' Local variables:
+	enter 0
+
+#line 2
+	pushi bp
+	pushi 8
+	addi
+	loadi
+	pushi bp
+	pushi 6
+	addi
+	loadi
+	and
+	pushi bp
+	pushi 4
+	addi
+	loadi
+	not
+	or
+	ret 2, 0, 6
+
+#line 5
+main:
+	' Parameters:
+	' Local variables:
+	' * BooleanType b1 (offset -2)
+	' * BooleanType b2 (offset -4)
+	' * BooleanType b3 (offset -6)
+	' * IntType a (offset -8)
+	enter 8
+
+#line 9
+	' Write
+	pushi 1
+	pushi 0
+	pushi 0
+	call f
+	outi
+
+#line 10
+	' Write
+	pushi 1
+	pushi 0
+	pushi 1
+	call f
+	outi
+
+#line 11
+	' Write
+	pushi 0
+	pushi 1
+	pushi 1
+	call f
+	outi
+
+#line 12
+	' Write
+	pushi 0
+	pushi 0
+	pushi 0
+	call f
+	outi
+
+#line 14
+	' Write
+	pushb 10
+	outb
+
+#line 16
+	pushi bp
+	pushi -2
+	addi
+	pushi 1
+	storei
+
+#line 17
+	pushi bp
+	pushi -4
+	addi
+	pushi 3
+	pushi 1
+	gti
+	storei
+
+#line 18
+	pushi bp
+	pushi -6
+	addi
+	pushf 4.5
+	pushf 4.2
+	lef
+	storei
+
+#line 19
+	' Write
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	outi
+
+#line 20
+	' Write
+	pushi bp
+	pushi -4
+	addi
+	loadi
+	outi
+
+#line 21
+	' Write
+	pushi bp
+	pushi -6
+	addi
+	loadi
+	outi
+
+#line 23
+	' Write
+	pushb 10
+	outb
+
+#line 25
+	' If:
+	pushi bp
+	pushi -2
+	addi
+	loadi
+	jz label2
+	' Then:
+	' Write
+	pushb 89
+	outb
+	jmp label1
+	' Else:
+label2:
+	' Write
+	pushb 78
+	outb
+label1:
+
+#line 28
+	' Write
+	pushb 10
+	outb
+
+#line 30
+	pushi bp
+	pushi -8
+	addi
+	pushi 0
+	storei
+
+#line 31
+	' WhileLoop
+label3:
+	pushi bp
+	pushi -8
+	addi
+	loadi
+	pushi 10
+	lti
+	jz label4
+	' Write
+	pushi bp
+	pushi -8
+	addi
+	loadi
+	outi
+	pushi bp
+	pushi -8
+	addi
+	pushi bp
+	pushi -8
+	addi
+	loadi
+	pushi 1
+	addi
+	storei
+	jmp label3
+label4:
+	ret 0, 8, 0

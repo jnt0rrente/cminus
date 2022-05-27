@@ -86,11 +86,13 @@ public class ErrorType extends AbstractType {
     }
 
     @Override
-    public void asBoolean(int line, int column) {
+    public void isBoolean(int line, int column) {
+
     }
 
     @Override
     public void written(int line, int column) {
+
     }
 
     @Override

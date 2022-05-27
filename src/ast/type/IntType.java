@@ -22,8 +22,8 @@ public class IntType extends AbstractType {
 
     @Override
     public Type arithmetic(Type type2, int line, int column) {
-        if (type2 instanceof IntType) return new IntType(this.getLine(), this.getColumn());
-        if (type2 instanceof DoubleType) return new DoubleType(this.getLine(), this.getColumn());
+        if (type2 instanceof IntType) return new IntType(line, column);
+        if (type2 instanceof DoubleType) return new DoubleType(line, column);
 
         return super.arithmetic(type2, line, column);
     }
@@ -39,18 +39,11 @@ public class IntType extends AbstractType {
 
     @Override
     public Type comparedTo(Type type2, int line, int column) {
-        if (type2 instanceof IntType) return this;
-        if (type2 instanceof DoubleType) return this;
-        if (type2 instanceof CharType) return this;
+        if (type2 instanceof IntType) return new BooleanType(line, column);
+        if (type2 instanceof DoubleType) return new BooleanType(line, column);
+        if (type2 instanceof CharType) return new BooleanType(line, column);
 
         return super.comparedTo(type2, line, column);
-    }
-
-    @Override
-    public Type logical(Type type2, int line, int column) {
-        if (type2 instanceof IntType) return this;
-
-        return super.logical(type2, line, column);
     }
 
     @Override
@@ -59,18 +52,8 @@ public class IntType extends AbstractType {
     }
 
     @Override
-    public Type unaryNot(int line, int column) {
-        return this;
-    }
-
-    @Override
     public String getTypeName() {
         return "IntType";
-    }
-
-    @Override
-    public void asBoolean(int line, int column) {
-
     }
 
     @Override
